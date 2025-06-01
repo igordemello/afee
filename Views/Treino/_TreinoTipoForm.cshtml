@@ -1,0 +1,51 @@
+﻿@model tcc_in305b.Models.TreinoTipo
+
+<form id="treinoTipoForm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="TreinadorId" /> <!-- Campo oculto para TreinadorId -->
+
+    <!-- Dropdown para selecionar o tipo de participante -->
+    <div class="form-group">
+    
+        <div class="form-group">
+            <label>Quem vai participar?</label>
+            <select id="participationType" class="form-control" required onchange="setCodigoValue()">
+                <option value="">Selecione uma opção</option>
+                <option value="0">Players</option>
+                <option value="1">Grupos</option>
+            </select>
+        </div>
+    </div>
+        <input type="hidden" asp-for="Codigo" id="Codigo" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Define o valor selecionado com base no valor do campo hidden "Codigo"
+                const codigo = document.getElementById("Codigo").value;
+                document.getElementById("participationType").value = codigo;
+            });
+        </script>
+
+    <div class="form-group">
+        <label asp-for="Nome">Nome</label>
+        <input asp-for="Nome" class="form-control" required />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CorHex">Cor (Hexadecimal)</label>
+        <input asp-for="CorHex" class="form-control" type="color" required />
+        <span asp-validation-for="CorHex" class="text-danger"></span>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="saveTreinoTipo()">Salvar</button>
+</form>
+
+<script>
+    // Função para definir o valor do campo oculto Codigo com base na seleção de tipo de participante
+    function setCodigoValue() {
+        var participationType = document.getElementById("participationType").value;
+        document.getElementById("Codigo").value = participationType; // Define Codigo para 0 ou 1
+    }
+</script>

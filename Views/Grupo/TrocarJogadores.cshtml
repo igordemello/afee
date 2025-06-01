@@ -1,0 +1,66 @@
+﻿@model tcc_in305b.ViewModels.TrocarJogadoresViewModel
+
+<h2>Trocar Jogadores entre Grupos</h2>
+<form asp-action="TrocarJogadores" method="post">
+    <div class="form-group">
+        <label>Nome do Jogador 1</label>
+        <select name="player1Nome" class="form-control" required>
+            <option value="">Selecione um jogador</option>
+            @foreach (var jogador in ViewBag.Jogadores)
+            {
+                <option value="@jogador.Text">@jogador.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Nome do Jogador 2</label>
+        <select name="player2Nome" class="form-control" required>
+            <option value="">Selecione um jogador</option>
+            @foreach (var jogador in ViewBag.Jogadores)
+            {
+                <option value="@jogador.Text">@jogador.Text</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Trocar Jogadores</button>
+</form>
+
+<div>
+    <ul>
+        @foreach (var grupo in ViewBag.Grupos)
+        {
+            <li>
+                <strong>@grupo.Text</strong>
+                <ul>
+                    @{
+                        var grupoPlayers = ViewData["GrupoPlayers"] as Dictionary<int, List<Player>>;
+                    }
+
+                    @if (grupoPlayers != null)
+                    {
+                        int chaveGrupo;
+                        var chaveValida = int.TryParse(grupo.Value, out chaveGrupo);
+
+                        if (chaveValida && grupoPlayers.ContainsKey(chaveGrupo))
+                        {
+                            foreach (var player in grupoPlayers[chaveGrupo])
+                            {
+                                <li>@player.Nome</li>
+                            }
+                        }
+                        else
+                        {
+                            <li>Nenhum jogador encontrado.</li>
+                        }
+                    }
+                    else
+                    {
+                        <li>Erro: Dicionário de jogadores não encontrado.</li>
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
+</div>

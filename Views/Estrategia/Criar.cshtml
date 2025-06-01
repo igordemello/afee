@@ -1,0 +1,35 @@
+﻿@model tcc_in305b.Models.Estrategia
+
+@{
+    ViewData["Title"] = "Criar Estratégia";
+}
+
+<h2>Criar Estratégia</h2>
+
+<form asp-action="Criar" method="post">
+    <div class="form-group">
+        <label for="Nome">Nome da Estratégia</label>
+        <input type="text" class="form-control" id="Nome" name="Nome" required>
+    </div>
+    <div class="form-group">
+        <label for="Descricao">Descrição</label>
+        <textarea class="form-control" id="Descricao" name="Descricao" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="Grupos">Selecione os Grupos</label>
+        <select multiple class="form-control" id="Grupos" name="Grupos">
+            @if (ViewBag.Grupos != null)
+            {
+                @foreach (var grupo in ViewBag.Grupos as List<Grupo>)
+                {
+                    <option value="@grupo.Id">@grupo.Nome</option>
+                }
+            }
+            else
+            {
+                <option disabled>Nenhum grupo disponível</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Criar Estratégia</button>
+</form>

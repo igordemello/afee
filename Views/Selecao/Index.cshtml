@@ -1,0 +1,262 @@
+﻿@model tcc_in305b.Controllers.SelecaoController.SelecaoIndexViewModel
+
+@{
+    ViewData["Title"] = "Seleções";
+}
+
+<style>
+    /* Estilo para evitar deslocamento de conteúdo */
+    .table td, .table th {
+        white-space: nowrap; /* Evita quebra de linha */
+        overflow: hidden; /* Esconde o texto excedente */
+        text-overflow: ellipsis; /* Adiciona "..." quando o texto é muito longo */
+    }
+
+    /* Ajusta largura máxima da coluna do Nome */
+    .table .nome-coluna {
+        max-width: 100px; /* Define um tamanho máximo (ajuste conforme necessário) */
+    }
+
+</style>
+
+<h1>Seleções</h1>
+@if (User.IsInRole("Treinador"))
+{
+    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createSelecaoModal">
+        Criar Seleção
+    </button>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<hr />
+
+
+
+<!-- Seleções Ativas -->
+<h2>Seleções Ativas</h2>
+@if (Model.SelecoesAtivas.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="nome-coluna">Nome</th>
+                <th>Treinador</th>
+                <th>Data de Início</th>
+                <th>Data Fim</th>
+                @if (User.IsInRole("Treinador"))
+                {
+                    <th>Análise</th>
+                }
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var selecao in Model.SelecoesAtivas)
+            {
+                <tr>
+                    <td class="nome-coluna">@selecao.Nome</td>
+                    <td>@selecao.Treinador?.Nome</td>
+                    <td>@selecao.DataInicio.ToShortDateString()</td>
+                    <td>-</td>
+                    @if (User.IsInRole("Treinador"))
+                    {
+                        <td>
+                            <button class="btn btn-secondary" onclick="verificarAnalise(@selecao.Id)">Ver Análise</button>
+                    </td>
+                    }
+                    <td>
+                        <a asp-action="Details" asp-route-id="@selecao.Id" class="btn btn-info" style=" color: white;">Detalhes</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Não há seleções ativas no momento.</p>
+}
+
+<!-- Seleções Finalizadas -->
+@if(User.IsInRole("Treinador")){
+<h2>Seleções Finalizadas</h2>
+@if (Model.SelecoesFinalizadas.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="nome-coluna">Nome</th>
+                <th>Treinador</th>
+                <th>Data de Início</th>
+                <th>Data Fim</th>
+                @if (User.IsInRole("Treinador"))
+                {
+                    <th>Análise</th>
+                }
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var selecao in Model.SelecoesFinalizadas)
+            {
+                <tr>
+                    <td class="nome-coluna">@selecao.Nome</td>
+                    <td>@selecao.Treinador?.Nome</td>
+                    <td>@selecao.DataInicio.ToShortDateString()</td>
+                    <td>@selecao.DataFim?.ToShortDateString()</td>
+                    @if (User.IsInRole("Treinador"))
+                    {
+                        <td>
+                            <button class="btn btn-secondary" onclick="verificarAnalise(@selecao.Id)">Ver Análise</button>
+                    </td>
+                    }
+                    <td>
+                        @if (User.IsInRole("Treinador"))
+                        {
+                            <button class="btn btn-danger" onclick="excluirSelecao(@selecao.Id)">Excluir</button>
+                        }
+                        <a asp-action="Details" asp-route-id="@selecao.Id" class="btn btn-info" style=" color: white;">Detalhes</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+else
+{
+    <p>Não há seleções finalizadas.</p>
+}
+}
+
+<div class="modal fade" id="createSelecaoModal" tabindex="-1" aria-labelledby="createSelecaoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createSelecaoModalLabel">Criar Nova Seleção</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="Nome" class="form-label">Nome da Seleção</label>
+                        <input type="text" class="form-control" id="Nome" name="Nome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="DataInicio" class="form-label">Data de Início</label>
+                        <input type="date" class="form-control" id="DataInicio" name="DataInicio" required min="@DateTime.Today.ToString("yyyy-MM-dd")">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Convidado" class="form-label">Convidado</label>
+                        <textarea class="form-control" id="Convidado" name="Convidado" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalCriarAnalise" tabindex="-1" role="dialog" aria-labelledby="modalCriarAnaliseLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCriarAnaliseLabel">Criar Nova Análise</h5>
+            </div>
+            <div class="modal-body">
+                <form id="formCriarAnalise">
+                    <input type="hidden" id="selecaoId" name="SelecaoId">
+                    <div class="form-group">
+                        <label for="descricao">Descrição</label>
+                        <textarea id="descricao" name="Descricao" class="form-control" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="criarAnalise()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function verificarAnalise(selecaoId) {
+        // Fazer a chamada AJAX para verificar a existência da análise
+        $.ajax({
+            url: '/Analise/VerificarAnalise',
+            method: 'GET',
+            data: { selecaoId: selecaoId },
+            success: function (data) {
+                if (data.temAnalise) {
+                    // Redirecionar para a página de análise se já existir
+                    window.location.href = `/Analise/Selecao?selecaoid=${selecaoId}`;
+                } else {
+                    // Abrir a modal para criar uma nova análise
+                    $('#selecaoId').val(selecaoId); // Configurar o ID da seleção na modal
+                    $('#modalCriarAnalise').modal('show');
+                }
+            },
+            error: function () {
+                alert('Erro ao verificar a análise. Tente novamente mais tarde.');
+            }
+        });
+    }
+
+    function criarAnalise() {
+        // Obter os dados do formulário
+        const selecaoId = $('#selecaoId').val();
+        const descricao = $('#descricao').val();
+
+        // Fazer a chamada AJAX para criar a análise
+        $.ajax({
+            url: '/Analise/CriarAnaliseSelecao',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ SelecaoId: selecaoId, Descricao: descricao }),
+            success: function () {
+                alert('Análise criada com sucesso!');
+                $('#modalCriarAnalise').modal('hide'); // Fechar a modal
+                location.reload(); // Recarregar a página para refletir a nova análise
+            },
+            error: function () {
+                alert('Erro ao criar a análise. Tente novamente.');
+            }
+        });
+    }
+    function excluirSelecao(selecaoId) {
+        if (confirm('Tem certeza de que deseja excluir esta seleção?')) {
+            // Fazer a chamada AJAX para excluir a seleção
+            $.ajax({
+                url: '/Selecao/ExcluirSelecao', // Rota do backend para excluir a seleção
+                method: 'POST',
+                data: { selecaoId: selecaoId }, // Envia o ID da seleção para o backend
+                success: function (data) {
+                    alert('Seleção excluída com sucesso!');
+                    location.reload(); // Recarregar a página para refletir a exclusão
+                },
+                error: function () {
+                    alert('Erro ao excluir a seleção. Tente novamente.');
+                }
+            });
+        }
+    }
+</script>

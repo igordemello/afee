@@ -1,0 +1,173 @@
+﻿@model IEnumerable<tcc_in305b.Models.Player>
+
+<head>
+    <link rel="stylesheet" href="~/css/player.css" />
+</head>
+
+<h1>Gerenciar Players:</h1>
+@if (User.IsInRole("Treinador"))
+{
+    <a href="@Url.Action("CreatePlayer", "Player")" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Criar
+    </a>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Status</th>
+            <th>Nickname</th>
+            <th>Tag</th>
+            <th>IGL?</th>
+            <th>Email</th>
+            <th>Classe</th>
+            <th>Idade</th>
+            <th>Análises</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+
+        {
+            @if(player.Status != "Desativado")
+            {
+                
+            
+            <tr>
+                <td>@player.Nome</td>
+                <td>@player.Status</td>
+                <td>@player.Nickname</td>
+                <td>@player.Tag</td>
+                @if(player.IGL == "true")
+                {
+                    <td>Sim</td>
+                }
+                else
+                {
+                    <td>Não</td>
+                }
+                <td>@player.User.Email</td>
+                <td>@player.Classe</td>
+                <td>@player.Idade</td>
+                
+                <td><a asp-action="Index" asp-controller="Analise" asp-route-PlayerId="@player.Id"><i class="bi bi-eye"></i></a></td>
+
+                <td>
+
+                    <a href="@Url.Action("EditPlayer", "Player", new { id = player.Id })" class="btn btn-success">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    @if(User.IsInRole("Admin"))
+                    {
+                        <a href="@Url.Action("DeletePlayer", "Player", new { id = player.Id })" class="btn btn-danger">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-danger" asp-route-playerId="@player.Id" asp-controller="Player" asp-action="DesativarPlayer" onclick="return confirm('Tem certeza que deseja desativar este jogador?');">
+                            <i class="bi bi-dash-circle"></i>
+                        </a>
+                    }
+
+                        <a href="@Url.Action("Historico", "Player", new { id = player.Id })" class="btn btn-info">
+                            Histórico
+                        </a>
+
+                </td>
+            </tr>
+
+            }
+        }
+    </tbody>
+   
+</table>
+
+<br />
+<br />
+<br />
+
+@if (User.IsInRole("Admin"))
+{
+
+    <div style="display:flex;gap:10px;">
+        <h3>Desativados</h3>
+        <button class="btn btn-link btn-sm" data-bs-toggle="collapse" data-bs-target="#desativados">
+            <i class="bi bi-chevron-down"></i>
+        </button>
+    </div>
+
+
+    <div id="desativados" class="collapse mt-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Status</th>
+                    <th>Nickname</th>
+                    <th>Tag</th>
+                    <th>IGL?</th>
+                    <th>Email</th>
+                    <th>Classe</th>
+                    <th>Idade</th>
+                    <th>Análises</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var player in Model)
+                {
+                    @if (player.Status == "Desativado")
+                    {
+
+
+                        <tr>
+                            <td>@player.Nome</td>
+                            <td>@player.Status</td>
+                            <td>@player.Nickname</td>
+                            <td>@player.Tag</td>
+                            @if (player.IGL == "true")
+                            {
+                                <td>Sim</td>
+                            }
+                            else
+                            {
+                                <td>Não</td>
+                            }
+                            <td>@player.User.Email</td>
+                            <td>@player.Classe</td>
+                            <td>@player.Idade</td>
+
+                            <td><a asp-action="Index" asp-controller="Analise" asp-route-PlayerId="@player.Id"><i class="bi bi-eye"></i></a></td>
+
+                            <td>
+
+
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a href="@Url.Action("DeletePlayer", "Player", new { id = player.Id })" class="btn btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+
+                                    <a class="btn btn-success" asp-route-playerId="@player.Id" asp-controller="Player" asp-action="AtivarPlayer" onclick="return confirm('Tem certeza que deseja ativar este jogador?');">
+                                        <i class="bi bi-plus-circle"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <p>---</p>
+                                }
+
+
+                            </td>
+                        </tr>
+
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+}

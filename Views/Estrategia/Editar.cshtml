@@ -1,0 +1,39 @@
+﻿@model tcc_in305b.Models.Estrategia
+
+@{
+    ViewData["Title"] = "Editar Estratégia";
+}
+
+<h2>Editar Estratégia</h2>
+
+<form asp-action="Editar" method="post">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="form-group">
+        <label for="Nome">Nome da Estratégia</label>
+        <input type="text" class="form-control" id="Nome" name="Nome" value="@Model.Nome" required>
+    </div>
+    <div class="form-group">
+        <label for="Descricao">Descrição</label>
+        <textarea class="form-control" id="Descricao" name="Descricao" rows="3" required>@Model.Descrição</textarea>
+    </div>
+    <div class="form-group">
+        <label for="Grupos">Selecione os Grupos</label>
+        <select multiple class="form-control" id="Grupos" name="Grupos">
+            @if (ViewBag.Grupos != null)
+            {
+                foreach (var grupo in ViewBag.Grupos as List<Grupo>)
+                {
+                    var selected = Model.EstrategiaGrupos.Any(eg => eg.GrupoId == grupo.Id) ? " selected=\"selected\"" : "";
+                    string option = $"<option value=\"{grupo.Id}\"{selected}>{grupo.Nome}</option>";
+                    @Html.Raw(option)
+                }
+            }
+            else
+            {
+                <option disabled>Nenhum grupo disponível</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+</form>

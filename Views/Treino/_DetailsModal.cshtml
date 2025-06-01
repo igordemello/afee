@@ -1,0 +1,58 @@
+﻿
+@model tcc_in305b.Models.Treino
+
+<head>
+    <link rel="stylesheet" href="~/css/treino.css" />
+</head>
+
+<body>
+    <h4><strong>Nome:</strong> @Model.Nome</h4>
+    <p><strong>Tipo:</strong> @Model.TreinoTipo.Nome</p>
+
+    <!-- Exibir Data, Horário Início e Horário Fim -->
+    <p><strong>Data:</strong> @Model.Data.ToString("dd/MM/yyyy")</p>
+    <p><strong>Horário inicial:</strong> @Model.HorarioInicio.ToString(@"hh\:mm")</p>
+    <p><strong>Horário final:</strong> @Model.HorarioFim.ToString(@"hh\:mm")</p>
+    @if(Model.EstrategiaId != null)
+    {
+        <p>
+            <strong>Estratégia Anexada:</strong> <a href="/Estrategia?estrategiaId=@Model.EstrategiaId&abrirModal=true">
+                @Model.Estrategia.Nome
+            </a>
+        </p>
+    }
+
+    @if (Model.TreinoTipo.Codigo == 1 && Model.TreinoGrupos.Any())
+    {
+        <h4>Grupos:</h4>
+        <ul>
+            @foreach (var treinoGrupo in Model.TreinoGrupos)
+            {
+                <li><strong>@treinoGrupo.Grupo.Nome</strong></li>
+                <ul>
+                    @foreach (var player in ((Dictionary<int, List<Player>>)ViewData["GrupoPlayers"])[treinoGrupo.GrupoId])
+                    {
+                        <li>@player.Nome</li>
+                    }
+                </ul>
+            }
+        </ul>
+    }
+    else if (Model.TreinoTipo.Codigo == 0 && Model.TreinoPlayers.Any())
+    {
+        <h4>Jogadores:</h4>
+        <ul>
+            @foreach (var treinoPlayer in Model.TreinoPlayers)
+            {
+                <li>@treinoPlayer.Player.Nome</li>
+            }
+        </ul>
+    }
+
+    <!-- Exibir botão de exclusão apenas para o treinador -->
+    @if (User.IsInRole("Treinador"))
+    {
+        <button type="button" class="btn btn-danger" onclick="deleteTreinomento(@Model.Id)">Excluir Treinomento</button>
+        <button type="button" class="btn btn-warning" onclick="openEditModal(@Model.Id)">Editar Treinomento</button>
+    }
+</body>

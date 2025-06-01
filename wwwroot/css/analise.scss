@@ -1,0 +1,49 @@
+﻿body.light {
+    --color-text: black;
+    --color-text-invert: white;
+    --color-background: #fffefe;
+    --color-background2: #e8edef;
+    --color-background3: #fff;
+    --color-text2: #272727;
+    --color-text3: #0f0f0f;
+    --filter: none;
+    --rgba-calendar: rgba(0,0,0,0.3);
+    --body-color: #E4E9F7;
+    --sidebar-color: #FFF;
+    --primary-color: #f0f8ff;
+    --primary-color-light: #F6F5FF;
+    --toggle-color: #DDD;
+}
+
+body.dark {
+    --color-text: white;
+    --color-text-invert: black;
+    --color-background: #0f0f0f;
+    --color-background2: #272727;
+    --color-background3: #000;
+    --color-text2: #272727;
+    --color-text3: #fffefe;
+    --filter: invert(1);
+    --rgba-calendar: rgba(255,255,255,0.3);
+    --body-color: #18191A;
+    --sidebar-color: #242526;
+    --primary-color: #3A3B3C;
+    --primary-color-light: #3A3B3C;
+    --toggle-color: #FFF;
+    --color-text: #CCC;
+    color: var(--color-text);
+}
+
+.dropdown-menu {
+    background-color: var(--color-background2);
+    color: var(--color-text)
+}
+
+.form-check-label {
+    width: 100%
+}
+
+input[type="text"], input[type="text"]:focus {
+    margin-bottom: 6px;
+    background-color: var(--color-background2);
+}

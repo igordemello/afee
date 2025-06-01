@@ -1,0 +1,540 @@
+﻿@{
+    ViewData["Title"] = "Treinos do Treinador";
+}
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="~/css/treino.css" />
+</head>
+
+<body>
+    <div id="calendar"></div>
+
+
+    <div class="calendar-legend mt-3">
+
+        @foreach (var tipo in ViewBag.TreinoTiposLegenda)
+        {
+            <div class="legend-item">
+                <span class="legend-color" style="background-color: @tipo.CorHex;"></span> <div class="legend-text">@tipo.Nome</div>
+            </div>
+        }
+
+    </div>
+
+    <center><button class="btn btn-secondary mt-3" onclick="openTiposModal()">Gerenciar Tipos de Treinos</button></center>
+
+    <!-- Modal para detalhes do treinomento -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalhes do Treinamento</h5>
+                </div>
+                <div class="modal-body" id="modalContent">
+                    <!-- O conteúdo será carregado via AJAX -->
+                    <!-- Botão para excluir o treinomento -->
+                    <button class="btn btn-danger" id="btnExcluirTreinomento">Excluir Treinamento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para criar um novo treinomento -->
+    <div id="createModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Treinamento</h5>
+                </div>
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div id="error-message" class="text-danger" style="display:none;"></div>
+                    <form id="createForm" method="post" action="/Treino/Create">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group mb-3">
+                            <label for="Nome">Nome</label>
+                            <input type="text" class="form-control" id="Nome" name="Nome" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="TreinoTipoId">Tipo de Treinomento:</label>
+                            <select id="TreinoTipoId" name="TreinoTipoId" class="form-select" onchange="toggleOptions()">
+                                <option value="">Selecione um tipo</option>
+                                @foreach (var treinotipos in ViewBag.TreinoTipos as List<SelectListItem>)
+                                {
+                                    <option value="@treinotipos.Value">@treinotipos.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <!-- Campo para selecionar a data -->
+                        <div class="form-group mb-3">
+                            <label for="Data">Data</label>
+                            <input type="text" class="form-control" id="Data" name="Data" required readonly>
+                        </div>
+
+                        <!-- Campo para selecionar o horário de início -->
+                        <div class="form-group mb-3">
+                            <label for="HorarioInicio">Horário de Início</label>
+                            <input type="text" class="form-control" id="HorarioInicio" name="HorarioInicio" required>
+                        </div>
+
+                        <!-- Campo para selecionar o horário de término -->
+                        <div class="form-group mb-3">
+                            <label for="HorarioFim">Horário de Término</label>
+                            <input type="text" class="form-control" id="HorarioFim" name="HorarioFim" required>
+                        </div>
+
+                        <div id="estrategiaOptions" class="form-group mb-3">
+                            <label for="Estrategias">Selecione a Estratégia:</label>
+                            <select id="EstrategiaId" name="EstrategiaId" class="form-select">
+                                <option value="">Sem Estratégia</option> <!-- Opção padrão -->
+                                @foreach (var estrategia in ViewBag.Estrategias as List<SelectListItem>)
+                                {
+                                    <option value="@estrategia.Value">@estrategia.Text</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div id="playerOptions" class="form-group mb-3" style="display:none;">
+                            <label for="Jogadores">Selecione os Jogadores:</label>
+                            <select id="Jogadores" name="Jogadores" class="form-select" multiple>
+                                @foreach (var player in ViewBag.Players as List<SelectListItem>)
+                                {
+                                    <option value="@player.Value">@player.Text</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div id="groupOptions" class="form-group mb-3" style="display:none;">
+                            <label for="Grupos">Selecione os Grupos:</label>
+                            <select id="Grupos" name="Grupos" class="form-select" multiple>
+                                @foreach (var grupo in ViewBag.Grupos as List<SelectListItem>)
+                                {
+                                    <option value="@grupo.Value">@grupo.Text</option>
+                                }
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Salvar Treinomento</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal CRUD Tipos -->
+    <div id="tiposModalContainer"></div>
+
+    @section Scripts {
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js"></script>
+
+        <script>
+            var calendar;
+            document.addEventListener('DOMContentLoaded', function () {
+                var calendarEl = document.getElementById('calendar');
+                calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    locale: 'pt-br',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    events: '/Treino/GetEvents',
+                    editable: true, // Permite arrastar os eventos
+
+                    dateClick: function (info) {
+                        // Abre o modal de criação ao clicar em uma data
+                        $('#createModal').modal('show');
+
+                        // Define a data do dia clicado
+                        const clickedDate = info.dateStr;
+
+                        // Inicializa o campo de data no modal com a data clicada
+                        flatpickr("#Data", {
+                            defaultDate: clickedDate,
+                            altInput: true,
+                            altFormat: "d/m/Y",
+                            dateFormat: "Y-m-d",
+                            clickOpens: false,
+                            allowInput: false
+                        }).setDate(clickedDate);
+
+                        // Inicializa os campos de horário
+                        flatpickr("#HorarioInicio", {
+                            defaultDate: "09:00",
+                            enableTime: true,
+                            noCalendar: true,
+                            time_24hr: true,
+                            altInput: true,
+                            altFormat: "H:i",
+                            dateFormat: "H:i",
+                        });
+
+                        flatpickr("#HorarioFim", {
+                            defaultDate: "10:00",
+                            enableTime: true,
+                            noCalendar: true,
+                            time_24hr: true,
+                            altInput: true,
+                            altFormat: "H:i",
+                            dateFormat: "H:i",
+                        });
+                    },
+
+                    // Função para impedir arrastar eventos para datas ou horários anteriores ao atual
+                    eventDrop: function (info) {
+                        const originalStart = info.oldEvent.start; // Data original do evento
+                        const newStart = info.event.start; // Nova data e horário para onde o evento foi movido
+
+                        // Obter a data e hora atual
+                        const now = new Date();
+
+                        // Zerar horas da data de hoje para comparação de datas (sem horas)
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0); // Zerar horas para comparar apenas a data
+
+                        // Verifica se a nova data é anterior à data atual
+                        if (newStart < today) {
+                            alert("Não é possível mover o evento para uma data anterior ao dia de hoje.");
+                            info.revert(); // Reverte a posição do evento para a original
+                            return; // Impede a continuação
+                        }
+
+                        // Se for o dia de hoje, verifica se o horário é anterior ao horário atual
+                        if (newStart.toDateString() === now.toDateString()) {
+                            // Verifica se o novo horário é anterior ao horário atual
+                            if (newStart.getTime() < now.getTime()) {
+                                alert("Não é possível mover o evento para um horário que já passou.");
+                                info.revert(); // Reverte a posição do evento para a original
+                                return; // Impede a continuação
+                            }
+                        }
+
+                        // Caso a nova data e horário sejam válidos, procede com a replicação
+                        replicateEvent(info.event.id, originalStart, newStart);
+                        info.revert(); // Reverte para prevenir a remoção do evento original
+                    },
+
+                    eventClick: function (info) {
+                        $('#myModal').modal('show');
+                        $.get('/Treino/Details?id=' + info.event.id, function (data) {
+                            $('#modalContent').html(data);
+                            // Passa o ID do evento para o botão de exclusão
+                            $('#btnExcluirTreinomento').attr('onclick', 'deleteTreinomento(' + info.event.id + ')');
+                        });
+                    },
+
+                    eventDidMount: function (info) {
+
+                        info.el.style.backgroundColor = info.event.extendedProps.backgroundColorHex;
+                        info.el.style.color = 'white';
+
+
+
+                    }
+                });
+                calendar.render();
+            });
+
+            function replicateEvent(eventId, originalStart, newStart) {
+                // Aqui garantimos que as datas sejam mantidas no fuso horário local
+                var originalDate = new Date(originalStart.getTime()); // Clona a data original
+                var newDate = new Date(newStart.getTime()); // Clona a nova data
+
+                // Ajustamos as horas da nova data para manter o horário da data original
+                newDate.setHours(originalStart.getHours());
+                newDate.setMinutes(originalStart.getMinutes());
+                newDate.setSeconds(originalStart.getSeconds());
+
+                // Enviamos as datas no formato local (não UTC) para o servidor
+                $.ajax({
+                    url: '/Treino/ReplicateEvent',
+                    type: 'POST',
+                    data: {
+                        eventId: eventId,
+                        originalDate: originalDate.toLocaleDateString('en-CA'), // Formato YYYY-MM-DD, local
+                        newDate: newDate.toLocaleDateString('en-CA') // Formato YYYY-MM-DD, local
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Evento replicado com sucesso!");
+                            calendar.refetchEvents(); // Atualiza o calendário para exibir o novo evento
+                        } else {
+                            alert("Erro ao replicar o evento: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Erro ao tentar replicar o evento.");
+                    }
+                });
+            }
+
+
+
+            // Função para excluir um treinomento
+            function deleteTreinomento(treinoId) {
+                if (confirm("Tem certeza de que deseja excluir este treinomento?")) {
+                    $.ajax({
+                        url: '/Treino/DeleteTreino/' + treinoId,
+                        type: 'POST',
+                        success: function (result) {
+                            if (result.success) {
+                                alert("Treinomento excluído com sucesso!");
+                                $('#myModal').modal('hide');
+                                calendar.refetchEvents(); // Atualiza o calendário
+                            } else {
+                                alert("Erro ao excluir o treinomento: " + result.message);
+                            }
+                        },
+                        error: function () {
+                            alert("Erro ao tentar excluir o treinomento.");
+                        }
+                    });
+                }
+            }
+
+
+            // Função para validar horários e verificar múltiplos jogadores/grupos
+            function toggleOptions() {
+                var treinoTipoId = document.getElementById("TreinoTipoId").value;
+                var playerOptions = document.getElementById("playerOptions");
+                var groupOptions = document.getElementById("groupOptions");
+
+                if (treinoTipoId) {
+                    // Requisição AJAX para obter o código do TreinoTipo selecionado
+                    $.ajax({
+                        url: '/Treino/GetTreinoTipoCodigo',
+                        type: 'GET',
+                        data: { treinoTipoId: treinoTipoId },
+                        success: function (codigo) {
+                            // Exibe as opções com base no código recebido
+                            if (codigo == 0) { // Individual (Players)
+                                playerOptions.style.display = "block";
+                                groupOptions.style.display = "none";
+                            } else if (codigo == 1) { // Coletivo (Grupos)
+                                playerOptions.style.display = "none";
+                                groupOptions.style.display = "block";
+                            }
+                        },
+                        error: function () {
+                            alert("Erro ao obter o tipo de treinomento.");
+                        }
+                    });
+                } else {
+                    playerOptions.style.display = "none";
+                    groupOptions.style.display = "none";
+                }
+            }
+
+            document.getElementById('createForm').addEventListener('submit', function (event) {
+                var treinoTipoId = document.getElementById("TreinoTipoId").value;
+                var jogadoresSelect = document.getElementById('Jogadores');
+                var gruposSelect = document.getElementById('Grupos');
+
+                if (treinoTipoId) {
+                    $.ajax({
+                        url: '/Treino/GetTreinoTipoCodigo',
+                        type: 'GET',
+                        async: false, // Necessário para garantir a resposta antes do envio
+                        data: { treinoTipoId: treinoTipoId },
+                        success: function (codigo) {
+                            if (codigo == 0) {
+                                if (!Array.from(jogadoresSelect.options).some(option => option.selected)) {
+                                    event.preventDefault();
+                                    alert("Selecione ao menos um jogador para treinomentos individuais.");
+                                }
+                            } else if (codigo == 1) {
+                                if (!Array.from(gruposSelect.options).some(option => option.selected)) {
+                                    event.preventDefault();
+                                    alert("Selecione ao menos um grupo para treinomentos coletivos.");
+                                }
+                            }
+                        },
+                        error: function () {
+                            alert("Erro ao validar o tipo de treinomento.");
+                            event.preventDefault();
+                        }
+                    });
+                }
+            });
+
+            // Inicializa a exibição correta dos campos ao carregar a página
+            document.addEventListener("DOMContentLoaded", function () {
+                toggleOptions();
+            });
+
+
+            function openEditModal(treinoId) {
+                $.get('/Treino/Edit?id=' + treinoId, function (data) {
+                    $('#editModal').remove(); // Remove o modal anterior, se existir
+                    $('body').append(data); // Adiciona o modal editado ao DOM
+                    $('#editModal').modal('show'); // Exibe o modal de edição
+
+                    flatpickr("#EditData", {
+                        altInput: true,
+                        altFormat: "d/m/Y",
+                        dateFormat: "Y-m-d",
+                        allowInput: false
+                    });
+
+                    flatpickr("#EditHorarioInicio", {
+                        enableTime: true,
+                        noCalendar: true,
+                        time_24hr: true,
+                        altInput: true,
+                        altFormat: "H:i",
+                        dateFormat: "H:i"
+                    });
+
+                    flatpickr("#EditHorarioFim", {
+                        enableTime: true,
+                        noCalendar: true,
+                        time_24hr: true,
+                        altInput: true,
+                        altFormat: "H:i",
+                        dateFormat: "H:i"
+                    });
+                });
+            }
+
+            $(document).ready(function () {
+                $('#createForm').on('submit', function (event) {
+                    event.preventDefault(); // Previne o envio padrão do formulário
+
+                    // Verificação da seleção de jogadores ou grupos
+                    var treinoTipoId = document.getElementById("TreinoTipoId").value;
+                    var jogadoresSelect = document.getElementById('Jogadores');
+                    var gruposSelect = document.getElementById('Grupos');
+
+                    $.ajax({
+                        url: '/Treino/GetTreinoTipoCodigo',
+                        type: 'GET',
+                        async: false, // Necessário para garantir a resposta antes do envio
+                        data: { treinoTipoId: treinoTipoId },
+                        success: function (codigo) {
+                            if (codigo == 0) {
+                                if (!Array.from(jogadoresSelect.options).some(option => option.selected)) {
+                                    alert("Selecione ao menos um jogador para treinomentos individuais.");
+                                    return; // Interrompe o envio se não há jogadores selecionados
+                                }
+                            } else if (codigo == 1) {
+                                if (!Array.from(gruposSelect.options).some(option => option.selected)) {
+                                    alert("Selecione ao menos um grupo para treinomentos coletivos.");
+                                    return; // Interrompe o envio se não há grupos selecionados
+                                }
+                            }
+
+                            // Envio do formulário após validação
+                            $.ajax({
+                                url: '/Treino/Create',
+                                type: 'POST',
+                                data: $('#createForm').serialize(),
+                                success: function (response) {
+                                    if (response.success) {
+                                        alert("Treinomento criado com sucesso!");
+                                        $('#createModal').modal('hide');
+                                        calendar.refetchEvents(); // Atualiza o calendário
+                                    } else {
+                                        alert("Erro: " + response.message);
+                                    }
+                                },
+                                error: function () {
+                                    alert("Erro ao tentar criar o treinomento.");
+                                }
+                            });
+                        },
+                        error: function () {
+                            alert("Erro ao verificar o tipo de treinomento.");
+                        }
+                    });
+                });
+            });
+
+            // Função para abrir o modal e carregar a lista de TreinoTipos
+            function openTiposModal() {
+                $.get('/Treino/ListTreinoTipos', function (data) {
+                    $('#tiposModalContainer').html(data); // Carrega o conteúdo no container do modal
+                    $('#tiposModal').modal('show'); // Abre o modal
+                }).fail(function () {
+                    alert("Erro ao carregar o modal de tipos de treinomento.");
+                });
+            }
+
+            // Função para carregar o formulário de criação no modal
+            function openCreateTreinoTipoForm() {
+                $.get('/Treino/CreateTreinoTipo', function (data) {
+                    $('#treinoTipoFormContainer').html(data); // Exibe o formulário de criação
+                }).fail(function () {
+                    alert("Erro ao carregar o formulário de criação.");
+                });
+            }
+
+            // Função para carregar o formulário de edição com o ID selecionado
+            function editTreinoTipo(id) {
+                $.get('/Treino/EditTreinoTipo', { id: id }, function (data) {
+                    $('#treinoTipoFormContainer').html(data); // Exibe o formulário de edição
+                }).fail(function () {
+                    alert("Erro ao carregar o formulário de edição.");
+                });
+            }
+
+            // Função para excluir um TreinoTipo com confirmação
+            function deleteTreinoTipo(id) {
+                if (confirm("Tem certeza que deseja deletar este Tipo de Treino?")) { // Exibe o alerta de confirmação
+                    $.post('/Treino/DeleteTreinoTipo', { id: id }, function (data) {
+                        if (data.success) {
+                            location.reload(); // Recarrega a página após uma exclusão bem-sucedida
+                        } else {
+                            alert("Erro ao excluir: " + data.message);
+                        }
+                    }).fail(function () {
+                        alert("Erro ao tentar excluir o tipo de treino.");
+                    });
+                }
+            }
+
+
+            function saveTreinoTipo() {
+                // Verifica se o "Quem vai participar?" foi selecionado
+                const participationType = document.getElementById("participationType").value;
+                if (participationType === "") { // Verifica se está vazio
+                    alert("Por favor, selecione uma opção válida para 'Quem vai participar?'");
+                    return; // Interrompe o envio
+                }
+
+                const isEditMode = $('#treinoTipoForm input[name="Id"]').val() && $('#treinoTipoForm input[name="Id"]').val() !== "0";
+                const url = isEditMode ? '/Treino/EditTreinoTipo' : '/Treino/CreateTreinoTipo';
+
+                $.post(url, $('#treinoTipoForm').serialize(), function (data) {
+                    if (data.success) {
+                        $('#tiposModal').modal('hide');
+                        location.reload(); // Recarrega a página após uma operação bem-sucedida
+                    } else {
+                        let errorMessage = "Erro: " + data.message;
+                        if (data.errors && data.errors.length > 0) {
+                            errorMessage += "\n" + data.errors.join("\n");
+                        }
+                        alert(errorMessage);
+                    }
+                }).fail(function () {
+                    alert("Erro ao salvar o tipo de treinomento.");
+                });
+            }
+
+
+
+        </script>
+    }
+</body>

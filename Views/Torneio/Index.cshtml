@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Torneio>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h1>Torneios</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Data Início</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var torneio in Model)
+        {
+            <tr>
+                <td>@torneio.Nome</td>
+                <td>@torneio.Tipo</td>
+                <td>@torneio.DataInicio.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a asp-action="Detalhes" asp-route-id="@torneio.Id" class="btn btn-primary">Detalhes</a>
+                    @if (User.IsInRole("Treinador"))
+                    {
+                        <form asp-action="Excluir" asp-route-id="@torneio.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger"
+                            onclick="return confirm('Tem certeza que deseja excluir este torneio?');">
+                                Excluir
+                            </button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (User.IsInRole("Treinador"))
+{
+    <a asp-action="Criar" class="btn btn-success">Criar Novo Torneio</a>
+}

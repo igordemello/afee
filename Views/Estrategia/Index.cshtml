@@ -1,0 +1,159 @@
+﻿@model List<tcc_in305b.Models.Estrategia>
+@{
+    string user = "";
+    string userRole = User.IsInRole("Treinador") ? "treinador" : User.IsInRole("Player") ? "player" : "";
+    string nome = "";
+
+}
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/estrategia.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Função para abrir a modal ao clicar no botão "Visualizar"
+            $('.abrirModal').on('click', function (event) {
+                event.preventDefault(); // Impede o comportamento padrão do link
+
+                // Pega o Nome e Descrição da estratégia usando os atributos data
+                var estrategiaNome = $(this).data('nome');
+                var estrategiaDescricao = $(this).data('descricao');
+
+                // Atualiza o conteúdo do modal dinamicamente
+                $('#modalContent').html(`
+                        <h4><strong>Nome:</strong><br>${estrategiaNome}</h4>
+                        <p><strong>Descrição:</strong><br>${estrategiaDescricao}</p>
+                    `);
+
+                // Exibe o modal
+                $('#myModal').modal('show');
+            });
+
+            // Código adicional para abrir a modal automaticamente se os parâmetros estão na URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const estrategiaId = urlParams.get('estrategiaId');
+            const abrirModal = urlParams.get('abrirModal');
+
+            if (abrirModal === 'true' && estrategiaId) {
+                // Procura o link com o data-id igual ao estrategiaId e simula um clique
+                var link = $('.abrirModal[data-id="' + estrategiaId + '"]');
+                if (link.length > 0) {
+                    var estrategiaNome = link.data('nome');
+                    var estrategiaDescricao = link.data('descricao');
+
+                    // Atualiza o conteúdo do modal dinamicamente
+                    $('#modalContent').html(`
+                            <h4><strong>Nome:</strong><br>${estrategiaNome}</h4>
+                            <p><strong>Descrição:</strong><br>${estrategiaDescricao}</p>
+                        `);
+
+                    // Exibe o modal
+                    $('#myModal').modal('show');
+                }
+            }
+
+            // Função de confirmação para exclusão
+            $('.deletarEstrategia').on('click', function (event) {
+                event.preventDefault();
+
+                // Pega o id e nome da estratégia
+                var estrategiaId = $(this).data('id');
+                var estrategiaNome = $(this).data('nome');
+
+                // Exibe a confirmação
+                var confirmar = confirm("Você tem certeza que deseja deletar a estratégia " + estrategiaNome + "?");
+
+                if (confirmar) {
+                    // Se confirmado, faz uma requisição para o método de exclusão no Controller
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Estrategia")/' + estrategiaId,
+                        type: 'POST',
+                        success: function () {
+                            // Atualiza a página ou remove o item da lista diretamente
+                            location.reload();
+                        },
+                        error: function () {
+                            alert("Ocorreu um erro ao tentar deletar a estratégia.");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Estratégias</h1>
+
+    <table class="table">
+        @if (userRole == "treinador")
+        {
+            <a asp-action="Criar"><button class="btn btn-primary btn-sm">Criar Estratégia</button></a>
+        }
+        @if (!Model.Any())
+        {
+            <h3 id="message">Ainda não foram criadas estratégias</h3>
+
+        }
+        else
+        {
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var estrategia in Model)
+                {
+
+                    <div id="d_est_@estrategia.Id" class="d-flex justify-content-between align-items-center">
+                    <tr>
+                        <td>
+                            <h2>@estrategia.Nome</h2>
+                        </td>
+                        <td>
+                            <div class="icon-container">
+                                <a class="abrirModal btn btn-secondary" href="#"
+                                   data-id="@estrategia.Id"
+                                   data-nome="@estrategia.Nome"
+                                   data-descricao="@estrategia.Descrição"
+                                   style="text-decoration: none;">
+                                    <i class="bi bi-eye"></i> Visualizar
+                                </a>
+                                    @if (userRole == "treinador")
+                                    {
+                                    <a asp-action="Editar" asp-route-id="@estrategia.Id" class="btn btn-success" style="text-decoration: none;">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    <a href="#" class="btn btn-danger deletarEstrategia"
+                                       data-id="@estrategia.Id"
+                                       data-nome="@estrategia.Nome">
+                                        <i class="fas fa-trash"></i> Deletar
+                                    </a>
+                                    }
+                            </div>
+                        </td>
+                    </tr>
+                    </div>
+                }
+                <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detalhes da Estratégia</h5>
+                            </div>
+                            <div class="modal-body" id="modalContent">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </tbody>
+        }
+    </table>
+</body>

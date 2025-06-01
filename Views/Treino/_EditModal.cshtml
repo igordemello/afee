@@ -1,0 +1,135 @@
+﻿
+@model tcc_in305b.Models.Treino
+
+<div id="editModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Treinomento</h5>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="post" action="/Treino/Edit">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="EditId" name="Id" value="@Model.Id" />
+                    <input type="hidden" id="EditTipoCodigo" value="@Model.TreinoTipo.Codigo" />
+
+
+                    <div class="form-group mb-3">
+                        <label for="EditNome">Nome</label>
+                        <input type="text" class="form-control" id="EditNome" name="Nome" value="@Model.Nome" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="EditTipo">Tipo de Treinomento:</label>
+                        <select id="EditTipo" name="TreinoTipoId" class="form-select" onchange="toggleEditOptions()">
+                            <option value="@Model.TreinoTipo.Id">@Model.TreinoTipo.Nome</option>
+                            @foreach (var treinotipos in ViewBag.TreinoTipos as List<SelectListItem>)
+                            {
+                                <option value="@treinotipos.Value">@treinotipos.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="EditData">Data</label>
+                        <input type="text" class="form-control" id="EditData" name="Data" value="@Model.Data.ToString("yyyy-MM-dd")" required readonly>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="EditHorarioInicio">Horário de Início</label>
+                        <input type="text" class="form-control" id="EditHorarioInicio" name="HorarioInicio" value="@Model.HorarioInicio.ToString(@"hh\:mm")" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="EditHorarioFim">Horário de Término</label>
+                        <input type="text" class="form-control" id="EditHorarioFim" name="HorarioFim" value="@Model.HorarioFim.ToString(@"hh\:mm")" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="EditEstrategia">Estratégia:</label>
+                        <select id="EditEstrategiaId" name="EstrategiaId" class="form-select">
+                            <option value="">Sem Estratégia</option> <!-- Opção padrão -->
+                            @foreach (var estrategia in ViewBag.Estrategias as List<SelectListItem>)
+                            {
+                                @if (Model.EstrategiaId == int.Parse(estrategia.Value))
+                                {
+                                    <option value="@estrategia.Value" selected>@estrategia.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@estrategia.Value">@estrategia.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div id="editPlayerOptions" class="form-group mb-3" style="display:none;">
+                        <label for="EditJogadores">Selecione os Jogadores:</label>
+                        <select id="EditJogadores" name="Jogadores" class="form-select" multiple>
+                            @foreach (var player in ViewBag.Players as List<SelectListItem>)
+                            {
+                                @if (Model.TreinoPlayers.Any(p => p.PlayerId.ToString() == player.Value))
+                                {
+                                    <option value="@player.Value" selected>@player.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@player.Value">@player.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div id="editGroupOptions" class="form-group mb-3" style="display:none;">
+                        <label for="EditGrupos">Selecione os Grupos:</label>
+                        <select id="EditGrupos" name="Grupos" class="form-select" multiple>
+                            @foreach (var grupo in ViewBag.Grupos as List<SelectListItem>)
+                            {
+                                @if (Model.TreinoGrupos.Any(g => g.GrupoId.ToString() == grupo.Value))
+                                {
+                                    <option value="@grupo.Value" selected>@grupo.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@grupo.Value">@grupo.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleEditOptions() {
+        var tipoCodigo = document.getElementById("EditTipo").value; // ID do tipo selecionado
+
+        // Verifique o valor do tipo para determinar se deve exibir "Jogadores" ou "Grupos"
+        $.ajax({
+            url: '/Treino/GetTreinoTipoCodigo', // Um endpoint que retorna o código do tipo
+            type: 'GET',
+            data: { treinoTipoId: tipoCodigo },
+            success: function (codigo) {
+                if (codigo == 0) { // Individual (jogadores)
+                    document.getElementById("editPlayerOptions").style.display = "block";
+                    document.getElementById("editGroupOptions").style.display = "none";
+                } else if (codigo == 1) { // Coletivo (grupos)
+                    document.getElementById("editPlayerOptions").style.display = "none";
+                    document.getElementById("editGroupOptions").style.display = "block";
+                }
+            },
+            error: function () {
+                alert("Erro ao obter o tipo de treinomento.");
+            }
+        });
+    }
+
+    // Executa a função assim que o DOM é carregado, para exibir corretamente as opções no carregamento do modal
+    document.addEventListener("DOMContentLoaded", function () {
+        toggleEditOptions();
+    });
+</script>

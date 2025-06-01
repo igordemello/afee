@@ -1,0 +1,113 @@
+﻿$black: #0f0f0f;
+$white: #fffefe;
+$impure-white: #e8edef;
+$impure-black: #272727;
+$gray: #272727;
+
+html[data-theme=light] {
+    --color-text: black;
+    --color-background: #{$white};
+    --color-background2: #{$impure-white};
+    --color-background3: #fff;
+    --color-text2: #{$gray};
+    --color-text3: #{$black};
+    --filter: none;
+    --aba: #d5d8dc;
+    --sombra: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme=dark] {
+    --color-text: white;
+    --color-background: #{$black};
+    --color-background2: #{$impure-black};
+    --color-background3: #000;
+    --color-text2: #{$gray};
+    --color-text3: #{$white};
+    --filter: invert(1);
+    --aba: #353535;
+    --sombra: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+body {
+    background-color: var(--color-background); /* Cor de fundo clara */
+    font-family: Arial, sans-serif; /* Fonte padrão */
+}
+
+h1 {
+    text-align: center;
+    color: var(--color-text); /* Cor do texto do título */
+}
+    
+h2 {
+    color: var(--color-text); /* Cor do texto do subtítulo */
+    margin-bottom: 20px;
+}
+
+form {
+    background-color: transparent; /* Fundo transparente */
+    padding: 30px;
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: var(--sombra); /* Sombra mais forte */
+    color: black; /* Cor do texto no formulário */
+}
+
+.form-floating {
+    margin-bottom: 20px; /* Espaçamento entre campos */
+}
+
+.mb-3 label {
+    color: var(--color-text);
+}
+
+input.form-control {
+    border: 1px solid var(--color-text3); /* Borda padrão cinza claro */
+    border-radius: 4px; /* Bordas arredondadas */
+    background-color: transparent; /* Fundo transparente para os campos de entrada */
+    color: var(--color-text); /* Cor do texto dos campos de entrada */
+}
+
+input.form-control:focus {
+    border-color: #007bff; /* Cor da borda ao focar no campo */
+    background-color: rgba(255, 255, 255, 0.1); /* Fundo levemente opaco ao focar */
+    outline: none; /* Remove a borda padrão de foco */
+}
+
+button {
+    background-color: #007bff; /* Cor de fundo do botão */
+    color: white; /* Cor do texto do botão */
+    border: none; /* Sem borda */
+    border-radius: 4px; /* Bordas arredondadas */
+    padding: 10px 20px; /* Espaçamento interno do botão */
+    cursor: pointer; /* Cursor em forma de mão ao passar o mouse */
+}
+
+button:hover {
+    background-color: #0056b3; /* Cor do botão ao passar o mouse */
+}
+
+footer {
+    text-align: center; /* Alinhamento centralizado */
+    color: #ffffff; /* Cor do texto do rodapé */
+    margin-top: 30px; /* Espaçamento acima do rodapé */
+}
+
+/* Estilos para lembrete */
+.reminder {
+    background-color: blue; /* Fundo levemente branco */
+    padding: 15px; /* Espaçamento interno */
+    border-radius: 5px; /* Bordas arredondadas */
+    color: var(--color-text); /* Cor do texto */
+    margin: 20px 0; /* Margem superior e inferior */
+    text-align: center; /* Alinhamento centralizado */
+}
+
+/* Estilos para links */
+a {
+    color: #007bff; /* Cor padrão do link */
+    text-decoration: none; /* Remove sublinhado */
+}
+
+a:hover {
+    text-decoration: underline; /* Sublinha ao passar o mouse */
+    color: #0056b3; /* Cor ao passar o mouse */
+}

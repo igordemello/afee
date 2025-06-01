@@ -1,0 +1,39 @@
+﻿@model tcc_in305b.ViewModels.CreateTreinadorViewModel
+
+<h2>Criar Novo Treinador</h2>
+
+<form asp-action="CreateTreinador" method="post">
+
+    <div class="form-group">
+        <label for="UserName">Nome de Usuário</label>
+        <input type="text" class="form-control" asp-for="UserName" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" class="form-control" asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Password">Senha</label>
+        <input type="password" class="form-control" asp-for="Password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Nome">Nome</label>
+        <input type="text" class="form-control" asp-for="Nome" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+
+    <div style="margin-top:3%;">
+        <button type="submit" class="btn btn-primary">Criar</button>
+        <a asp-action="CrudTreinador" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,418 @@
+﻿<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js"></script>
+
+@model IEnumerable<tcc_in305b.Models.Player>
+
+<head>
+    <link rel="stylesheet" href="~/css/treinadorIndex.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="container">
+        <div class="topcontent">
+            <div class="calendario">
+                <h1 class="titulocalendar">Programação mensal</h1>
+                <div class="calendario table-scroll-container" id="calendar"></div>
+                <div class="calendar-legend mt-3">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: #28a745"></span> <div class="legend-text">Treino</div>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: #007bff"></span> <div class="legend-text">Torneio</div>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: #ffc107"></span> <div class="legend-text">Seleção</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="listaplayers">
+                <div class="listaplayers-header">
+                    <h2>Seus Players:</h2>
+                    <a href="Player/CrudPlayer" class="btn btn-outline-primary">Gerenciar</a>
+                </div>
+
+                @{
+                    // Fazemos o cast explícito para garantir que o ViewBag.Players seja tratado como uma lista de Player
+
+                    var players = ViewBag.Players as List<tcc_in305b.Models.Player>;
+                }
+
+                @if (players != null && players.Count > 0)
+
+                {
+                    <div class="table-scroll-container">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Nickname#Tag</th>
+                                    <th>Evolução</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var player in players)
+                                {
+                                    <tr>
+                                        <td>@player.Nickname#@player.Tag</td>
+                                        <td>
+                                            <a href="#"
+                                               data-toggle="modal"
+                                               data-target="#evolucaoModal"
+                                               data-puuid="@player.Puuid"
+                                               data-elo="@player.EloCriacao">
+                                                <i class="fa-regular fa-eye icon-menu-players"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+                else
+
+                {
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nickname#Tag</th>
+                                <th>Evolução</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" style="text-align:center;">Sem jogadores</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+
+
+        <!-- Modal para Evolução do Jogador -->
+        <div class="modal fade" id="evolucaoModal" tabindex="-1" role="dialog" aria-labelledby="evolucaoModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <header class="modal-header">
+                        <h5 class="modal-title" id="evolucaoModalLabel">Evolução do Jogador</h5>
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </header>
+                    <div class="modal-body modal-player">
+                        <section class="modal-body elosimg">
+                            <div class="elocriacao">
+                                <p><strong>Elo de Criação:</strong></p>
+                                <img id="imgEloCriacao" class="eloinicio" src="" alt="Elo de Criação" style="width: 100px; height: auto;">
+                                <p id="eloCriacao">Carregando...</p>
+                            </div>
+                            <i class="bi bi-arrow-right"></i>
+                            <div class="eloatual">
+                                <p><strong>Elo Atual:</strong></p>
+                                <img id="imgEloAtual" src="" alt="Elo Atual" style="width: 100px; height: auto;">
+                                <p id="eloAtual">Carregando...</p>
+                            </div>
+                        </section>
+                        <!-- Exibir Kills -->
+                        <p>(Últimas 10 Partidas)</p>
+                        <section class="estatisticas">
+                            <p id="kills">Kills: Carregando...</p>
+                            <p id="deaths">Mortes: Carregando...</p>
+                            <p id="assists">Assistências: Carregando...</p>
+                            <p id="KDA">KDA: Carregando...</p>
+                            <p id="hsPercentage">HS%: Carregando...</p>
+                            <p id="winRate">WIN%: Carregando...</p>
+                            <p id="damage">ADR: Carregando...</p>
+                            <p id="firstBloods">First Bloods: Carregando...</p>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <br />
+
+        <div class="ToDoList">
+            <h2>Lista de Tarefas:</h2>
+
+            <button class="btn btn-outline-primary mb-3" data-toggle="modal" data-target="#novaTarefaModal">
+                <i class="bi bi-plus"></i> Nova Tarefa
+            </button>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Tarefa</th>
+                        <th>Descrição</th>
+                        <th>Data de Criação</th>
+                        <th>Concluída</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var todo in (IEnumerable<tcc_in305b.Models.ToDoTreinador>)ViewBag.ToDoList)
+
+                    {
+                        <tr class="@(todo.Feito ? "tarefa-concluida" : "")">
+                            <td>@todo.Nome</td>
+                            <td>
+                                <a href="#"
+                                   data-toggle="modal"
+                                   data-target="#descricaoModal"
+                                   data-descricao="@todo.Descricao">
+                                    <i class="fa-regular fa-eye icon-todo"></i>
+                                </a>
+                            </td>
+                            <td>@todo.DtCriacao.ToShortDateString()</td>
+                            <td>
+                                <form asp-action="ToggleComplete" asp-controller="Treinador" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@todo.Id" />
+                                    <div class="checkbox-wrapper-39">
+                                        <label>
+                                            <input type="checkbox"
+                                                   id="checkbox-@todo.Id"
+                                                   name="Feito"
+                                                   value="true"
+                                            @(todo.Feito ? "checked" : "")
+                                                   onchange="this.form.submit();" />
+                                            <span class="checkbox"></span>
+                                        </label>
+                                    </div>
+                                </form>
+
+                            </td>
+                            <td>
+                                <form asp-action="DeleteTodo" asp-controller="Treinador" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@todo.Id" />
+                                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Tem certeza que deseja remover?')"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Modal para Adicionar Nova Tarefa -->
+        <div class="modal fade" id="novaTarefaModal" tabindex="-1" role="dialog" aria-labelledby="novaTarefaModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="novaTarefaModalLabel">Adicionar Nova Tarefa</h5>
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Formulário de nova tarefa -->
+                        <form asp-action="CreateTodo" asp-controller="Treinador" method="post">
+                            @if (players != null && players.Count > 0)
+
+                            {
+                                <!-- Apenas exibe o campo de TreinadorId se houver jogadores -->
+                                <input type="hidden" name="TreinadorId" value="@(players[0].TreinadorId)" />
+                            }
+                            <div class="form-group">
+                                <label for="nomeTarefa">Título da Tarefa</label>
+                                <input type="text" id="nomeTarefa" name="Nome" placeholder="Título da tarefa" class="form-control" maxlength="40" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="descricaoTarefa">Descrição da Tarefa</label>
+                                <textarea id="descricaoTarefa" name="Descricao" placeholder="Descrição da tarefa" class="form-control" required></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Adicionar Tarefa</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal para Exibir Descrição -->
+        <div class="modal fade" id="descricaoModal" tabindex="-1" role="dialog" aria-labelledby="descricaoModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="descricaoModalLabel">Descrição da Tarefa</h5>
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- O conteúdo da descrição será inserido aqui pelo JavaScript -->
+                        <p id="descricaoModalContent"></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'pt-br',  // Define o idioma para português
+                events: '/Treinador/GetEvents', // URL para carregar eventos
+                headerToolbar: {
+                    start: 'title', // will normally be on the left. if RTL, will be on the right
+                    center: '',
+                    end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
+                },
+                contentHeight: 'auto', // Define a altura específica do conteúdo
+                height: 'auto',
+                expandRows: true,    // Expande as linhas para preencher a altura disponível
+                // Alterar a cor do evento diretamente
+                eventDidMount: function (info) {
+                    // Acessa o tipo do evento
+                    var type = info.event.extendedProps.type;
+
+                    // Define a cor com base no tipo
+                    if (type === 'Treino') {
+                        info.el.style.backgroundColor = '#28a745'; // Verde para Treino
+                        info.el.style.borderColor = '#28a745';
+                        info.el.style.color = 'white';
+                    } else if (type === 'Torneio') {
+                        info.el.style.backgroundColor = '#007bff'; // Azul para Torneio
+                        info.el.style.borderColor = '#007bff';
+                        info.el.style.color = 'white';
+                    } else if (type === 'Seleção') {
+                        info.el.style.backgroundColor = '#ffc107'; // Amarelo para Seleção
+                        info.el.style.borderColor = '#ffc107';
+                        info.el.style.color = 'black';
+                    } else if (type === 'Round') {
+                        info.el.style.backgroundColor = '#ff7607';
+                        info.el.style.borderColor = '#ff7607';
+                        info.el.style.color = 'black';
+                    }
+                },
+            });
+            calendar.render();
+        });
+
+        $('#descricaoModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Botão que acionou a modal
+            var descricao = button.data('descricao'); // Extrai o valor da descrição
+
+            // Insere a descrição no conteúdo da modal
+            var modal = $(this);
+            modal.find('#descricaoModalContent').text(descricao);
+        });
+
+        function updateCheckboxValue(form) {
+            // Encontra a checkbox dentro do formulário
+            const checkbox = form.querySelector('input[type="checkbox"][name="Feito"]');
+
+            // Define o valor da checkbox explicitamente para 'true' ou 'false'
+            checkbox.value = checkbox.checked ? "true" : "false";
+        }
+
+        // Evento para submeter o formulário automaticamente ao clicar na checkbox
+        document.querySelectorAll('input[type="checkbox"][name="Feito"]').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                this.form.submit();
+            });
+        });
+
+        $('#evolucaoModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var puuid = button.data('puuid');
+            var eloCriacao = button.data('elo');
+
+            // Referência ao modal
+            var modal = $(this);
+
+            // Exibir o Elo de Criação no modal
+            modal.find('#eloCriacao').text(eloCriacao);
+
+            // Define a imagem do Elo de Criação
+            modal.find('#imgEloCriacao').attr('src', '/img/elos/' + eloCriacao + '.png');
+
+            // Define a imagem de carregamento para o Elo Atual enquanto o AJAX é executado
+            modal.find('#imgEloAtual').attr('src', '/img/loading.gif');
+
+            // Exibir carregando para as kills
+            modal.find('#kills').text('Abates: Carregando...');
+            modal.find('#deaths').text('Mortes: Carregando...');
+            modal.find('#assists').text('Assistências: Carregando...');
+            modal.find('#hsPercentage').text('HS%: Carregando...');
+            // Realizar a chamada AJAX para obter o EloAtual
+            $.ajax({
+                url: '/Treinador/GetEloAtual',
+                type: 'POST',
+                data: { puuid: puuid },
+                success: function (data) {
+                    console.log("Resposta AJAX (Elo Atual):", data);
+                    if (data.success) {
+                        modal.find('#eloAtual').text(data.elo);
+
+                        // Substitui a imagem de carregamento pelo Elo Atual
+                        modal.find('#imgEloAtual').attr('src', '/img/elos/' + data.elo + '.png');
+                    } else {
+                        modal.find('#eloAtual').text(data.message);
+                        modal.find('#imgEloAtual').attr('src', '/img/error.png'); // Imagem de erro
+                    }
+                },
+                error: function () {
+                    modal.find('#eloAtual').text('Erro ao buscar o elo atual');
+                    modal.find('#imgEloAtual').attr('src', '/img/error.png'); // Imagem de erro
+                }
+            });
+
+            // Realizar a chamada AJAX para obter as Kills
+            $.ajax({
+                url: '/Treinador/GetPlayerStats',
+                type: 'POST',
+                data: { puuid: puuid },
+                success: function (data) {
+                    console.log("Resposta AJAX (Kills):", data);
+                    if (data.success) {
+                        modal.find('#kills').text(`Abates: ${data.kills}`);
+                        modal.find('#deaths').text(`Mortes: ${data.deaths}`);
+                        modal.find('#assists').text(`Assistências: ${data.assists}`);
+                        modal.find('#hsPercentage').text(`HS%: ${data.hsPercentage}%`);
+                        modal.find("#KDA").text("KDA: "+ ((data.kills + data.assists) / data.deaths).toFixed(2));
+                        modal.find("#winRate").text("WIN%: " + data.winRate + "%");
+                        modal.find("#damage").text(`ADR: ${data.damage}`);
+                        modal.find("#firstBloods").text(`First Bloods: ${data.firstBloods}`);
+                    } else {
+                        modal.find('#kills').text('Nenhuma partida competitiva encontrada.');
+                        modal.find('#deaths').text('');
+                        modal.find('#assists').text('');
+                        modal.find('#hsPercentage').text('');
+                        modal.find("#KDA").text('');
+                        modal.find("#winRate").text('');
+                        modal.find("#damage").text('');
+                        modal.find("#firstBloods").text('');
+                    }
+                },
+                error: function () {
+                    modal.find('#kills').text('Erro ao carregar estatísticas.');
+                    modal.find('#deaths').text('');
+                    modal.find('#assists').text('');
+                    modal.find('#hsPercentage').text('');
+                    modal.find("#KDA").text('');
+                    modal.find("#winRate").text('');
+                    modal.find("#damage").text('');
+                    modal.find("#firstBloods").text('');
+                }
+            });
+        });
+    </script>
+</body>

@@ -1,0 +1,78 @@
+﻿<style>
+    .titulo{
+        margin-top:10px;
+        display:flex;
+        gap: 10px;
+    }
+</style>
+
+
+<div class="titulo">
+    <h3>Análise da <strong>@ViewBag.NomeSelecao</strong></h3>
+    <button class="btn btn-outline-warning btn-sm" onclick="abrirModalEditar()"><i class="bi bi-pencil"></i></button>
+</div>
+
+<h5>Data:</h5>
+<p>@ViewBag.Data.ToShortDateString()</p>
+
+<h4>Descrição:</h4>
+<p>@ViewBag.Descricao</p>
+
+
+
+<div class="modal fade" id="modalEditarDescricao" tabindex="-1" role="dialog" aria-labelledby="modalEditarDescricaoLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarDescricaoLabel">Editar Descrição da Análise</h5>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarDescricao">
+                    <input type="hidden" id="analiseId" value="@Model.Analise.Id">
+                    <div class="form-group">
+                        <label for="novaDescricao">Nova Descrição</label>
+                        <textarea id="novaDescricao" class="form-control" rows="3" required>@Model.Analise.Descricao</textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="editarDescricao()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function abrirModalEditar() {
+        $('#modalEditarDescricao').modal('show');
+    }
+
+    function editarDescricao() {
+        const analiseId = $('#analiseId').val();
+        const novaDescricao = $('#novaDescricao').val();
+
+        if (!novaDescricao.trim()) {
+            alert('A descrição não pode estar vazia.');
+            return;
+        }
+
+        // Enviar a nova descrição via AJAX
+        $.ajax({
+            url: '/Analise/EditarAnaliseSelecao',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ AnaliseId: analiseId, NovaDescricao: novaDescricao }),
+            success: function () {
+                alert('Descrição atualizada com sucesso!');
+                $('#descricaoAtual').text(novaDescricao); // Atualizar na página
+                $('#modalEditarDescricao').modal('hide'); // Fechar a modal
+                window.location.reload();
+            },
+            error: function () {
+                alert('Erro ao atualizar a descrição. Tente novamente.');
+            }
+        });
+    }
+</script>

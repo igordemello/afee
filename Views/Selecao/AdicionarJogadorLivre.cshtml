@@ -1,0 +1,29 @@
+﻿@model tcc_in305b.Models.Player
+
+<h2>Adicionar Jogador Livre a uma Equipe</h2>
+
+<form asp-action="AdicionarJogadorLivre" method="post">
+    <div class="form-group">
+        <label for="jogadorId">Selecionar Jogador Livre</label>
+        <select name="jogadorId" id="jogadorId" class="form-control" required>
+            <option value="">Selecione um jogador</option>
+            @foreach (var jogador in ViewBag.JogadoresLivres)
+            {
+                <option value="@jogador.Value">@jogador.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="equipeId">Selecionar Equipe</label>
+        <select name="equipeId" id="equipeId" class="form-control" required>
+            <option value="">Selecione uma Equipe</option>
+            @foreach (var equipe in ViewBag.Equipes)
+            {
+                <option value="@equipe.Value">@equipe.Text</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Adicionar a Equipe</button>
+</form>

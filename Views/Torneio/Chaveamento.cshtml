@@ -1,0 +1,318 @@
+﻿@model IEnumerable<Chaveamento>
+
+@{
+    int rodadaIndex = 0;
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/Chaveamento.css" />
+</head>
+
+<body>
+    <h2>Chaveamento do Torneio</h2>
+
+    <div class="mb-3">
+        <!-- Botão Avançar Rodada -->
+        @if (Model.Last().Partidas.Count > 1 && Model.Last().Partidas.All(p => p.EquipePartidas.All(ep => ep.Pontuacao != null)))
+        {
+            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dataAvancarModal"
+               data-chaveamento-id="@Model.Last().Id">Avançar Rodada</a>
+        }
+
+        <!-- Botão Finalizar Torneio -->
+        @if (Model.Last().Partidas.Count == 1 && Model.Last().Partidas.First().EquipePartidas.All(ep => ep.Pontuacao != null))
+        {
+            <a asp-action="FinalizarTorneio" asp-route-torneioId="@Model.Last().TorneioId" class="btn btn-success">Finalizar Torneio</a>
+        }
+
+    </div>
+
+    <!-- Exibição do Chaveamento -->
+    <div class="tournament-container">
+        <div class="tournament-headers">
+            @foreach (var rodada in Model)
+            {
+                <h3>@rodada.Nome <br /> <span style="font-size: 70%">@rodada.Data.ToString("dd/MM/yyyy")</span></h3>
+            }
+        </div>
+
+        <div class="tournament-brackets">
+            @* Variável para acompanhar o índice da rodada *@
+            @foreach (var rodada in Model)
+            {
+                @* Definir a classe com base na condição de ser ou não a primeira rodada *@
+                var ulClass = rodadaIndex == 0 ? "bracket bracket-first" : "bracket bracket-other";
+
+                <ul class="@ulClass">
+                    @foreach (var partida in rodada.Partidas)
+                    {
+                        @* Verificar se é o último item da iteração *@
+                        var liClass = (rodada.Partidas.LastOrDefault() == partida) ? "team-item item-last" : "team-item item-other";
+
+                        <li class="@liClass">
+                            <span class="team-info">
+                                <span class="pontuacao">@partida.EquipePartidas.First().Pontuacao</span>
+                                @partida.EquipePartidas.First().Equipe.Nome
+
+                                @if (partida.Data.TimeOfDay == TimeSpan.Zero && User.IsInRole("Treinador"))
+                                {
+                                    <a href="#" class="inserir-horario" data-bs-toggle="modal" data-bs-target="#horarioModal"
+                                    data-partida-id="@partida.Id">Inserir Horário</a>
+                                }
+                                else if (partida.Data.TimeOfDay == TimeSpan.Zero && User.IsInRole("Player"))
+                                {
+                                    <time>indefinido</time>
+                                }
+                                else
+                                {
+                                    <time>@partida.Data.ToString("HH:mm")</time>
+                                }
+
+                                @partida.EquipePartidas.Last().Equipe.Nome
+                                <span class="pontuacao">@partida.EquipePartidas.Last().Pontuacao</span>
+                            </span>
+
+                            @if (partida.Data.TimeOfDay != TimeSpan.Zero && User.IsInRole("Treinador"))
+                            {
+                                <a href="#" class="btn btn-primary inserir-pontuacao" data-bs-toggle="modal" data-bs-target="#pontuacaoModal"
+                                   data-partida-id="@partida.Id"
+                                   data-equipes='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(partida.EquipePartidas.Select(ep => new { ep.Equipe.Nome, ep.EquipeId })))'>
+                                    Inserir Pontuação
+                                </a>
+                            }
+
+                        </li>
+                    }
+                </ul>
+
+                @* Incrementar o índice da rodada *@
+                rodadaIndex++;
+            }
+        </div>
+
+
+        <!-- Modal para Inserir Horário -->
+        <div class="modal fade" id="horarioModal" tabindex="-1" aria-labelledby="horarioModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="horarioModalLabel">Inserir Horário da Partida</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="horarioForm">
+                            <input type="hidden" id="partidaId" name="partidaId" />
+                            <div class="mb-3">
+                                <label for="horario" class="form-label">Horário</label>
+                                <input type="time" class="form-control" id="horario" name="horario" required />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="salvarHorario">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para Selecionar a Data da Próxima Rodada -->
+        <div class="modal fade" id="dataAvancarModal" tabindex="-1" aria-labelledby="dataAvancarModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="dataAvancarModalLabel">Escolha a Data da Próxima Rodada</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="dataAvancarForm">
+                            <input type="hidden" id="chaveamentoId" name="chaveamentoId" />
+                            <div class="mb-3">
+                                <label for="dataProximaRodada" class="form-label">Data da Próxima Rodada</label>
+                                <input type="date" class="form-control" id="dataProximaRodada" name="dataProximaRodada" required min="@Model.Last().Data.ToString("yyyy-MM-dd")" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="confirmarDataAvancar">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para Inserir Pontuação -->
+        <div class="modal fade" id="pontuacaoModal" tabindex="-1" aria-labelledby="pontuacaoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="pontuacaoModalLabel">Inserir Pontuação</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="pontuacaoForm">
+                            <input type="hidden" id="partidaId" name="partidaId" />
+
+                            <div id="equipesContainer">
+                                <!-- Este container será preenchido dinamicamente com as equipes da partida -->
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="salvarPontuacao">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Configurar o botão "Salvar Horário"
+                document.getElementById('salvarHorario').addEventListener('click', function () {
+                    const partidaId = document.getElementById('partidaId').value;
+                    const horario = document.getElementById('horario').value;
+
+                    if (!horario) {
+                        alert('Por favor, insira um horário válido.');
+                        return;
+                    }
+
+                    // Fazer requisição ao servidor para salvar o horário
+                    fetch(`/Torneio/InserirHorario`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ partidaId, horario }),
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                location.reload(); // Atualiza a página para refletir as mudanças
+                            } else {
+                                alert('Erro ao salvar o horário. Tente novamente.');
+                            }
+                        });
+                });
+
+                // Configurar a modal para carregar o ID da partida
+                document.querySelectorAll('.inserir-horario').forEach(link => {
+                    link.addEventListener('click', function () {
+                        const partidaId = this.getAttribute('data-partida-id');
+                        document.getElementById('partidaId').value = partidaId;
+                    });
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Configurar o botão "Confirmar" da modal
+                document.getElementById('confirmarDataAvancar').addEventListener('click', function () {
+                    const chaveamentoId = document.getElementById('chaveamentoId').value;
+                    const dataProximaRodada = document.getElementById('dataProximaRodada').value;
+
+                    if (!dataProximaRodada) {
+                        alert('Por favor, insira uma data válida.');
+                        return;
+                    }
+
+                    // Fazer requisição ao servidor para avançar rodada
+                    fetch(`/Torneio/AvancarRodada`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ chaveamentoId, dataProximaRodada }),
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                location.reload(); // Atualiza a página para refletir as mudanças
+                            } else {
+                                alert('Erro ao avançar a rodada. Tente novamente.');
+                            }
+                        });
+                });
+
+                // Configurar a modal para carregar o ID do chaveamento
+                document.querySelectorAll('[data-bs-toggle="modal"][data-chaveamento-id]').forEach(link => {
+                    link.addEventListener('click', function () {
+                        const chaveamentoId = this.getAttribute('data-chaveamento-id');
+                        document.getElementById('chaveamentoId').value = chaveamentoId;
+                    });
+                });
+            });
+
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Configurar o botão "Salvar Pontuação"
+                document.getElementById('salvarPontuacao').addEventListener('click', function () {
+                    const partidaId = document.getElementById('partidaId').value;
+                    const pontuacoes = Array.from(document.querySelectorAll('.pontuacao-input')).map(input => ({
+                        equipeId: input.dataset.equipeId,
+                        pontuacao: parseInt(input.value, 10)
+                    }));
+
+                    if (pontuacoes.some(p => isNaN(p.pontuacao))) {
+                        alert('Por favor, preencha todas as pontuações.');
+                        return;
+                    }
+
+                    // Validar se as pontuações das duas equipes são iguais
+                    if (pontuacoes[0].pontuacao === pontuacoes[1].pontuacao) {
+                        alert('As pontuações das duas equipes não podem ser iguais.');
+                        return;
+                    }
+
+                    // Enviar os dados para o backend
+                    fetch(`/Torneio/InserirPontuacao`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ partidaId, pontuacoes }),
+                    })
+                        .then(async response => {
+                            if (!response.ok) {
+                                const errorMessage = await response.text();
+                                alert(`Erro: ${errorMessage}`);
+                            } else {
+                                location.reload();
+                            }
+                        })
+                        .catch(error => {
+                            alert(`Erro ao conectar ao servidor: ${error.message}`);
+                        });
+                });
+
+                // Configurar a modal para carregar os dados da partida
+                document.querySelectorAll('.inserir-pontuacao').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const partidaId = this.getAttribute('data-partida-id');
+                        const equipes = JSON.parse(this.getAttribute('data-equipes'));
+
+                        document.getElementById('partidaId').value = partidaId;
+
+                        const container = document.getElementById('equipesContainer');
+                        container.innerHTML = '';
+
+                        equipes.forEach(equipe => {
+                            const row = document.createElement('div');
+                            row.classList.add('mb-3');
+                            row.innerHTML = `
+                                <label class="form-label">${equipe.Nome}</label>
+                                <input type="number" class="form-control pontuacao-input" data-equipe-id="${equipe.EquipeId}" required />
+                            `;
+                            container.appendChild(row);
+                        });
+                    });
+                });
+            });
+
+        </script>
+
+</body>
+

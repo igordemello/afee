@@ -1,0 +1,439 @@
+﻿
+
+@model tcc_in305b.ViewModels.FiltroAnaliseViewModel
+
+@using Newtonsoft.Json
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js"></script>
+
+
+<style>
+    .porratoda{
+        width: 60%;
+    }
+
+    .filtros{
+        display:flex;
+        gap: 10px;
+        margin-bottom:10px;
+    }
+
+    .form-group{
+        width: 200px;
+    }
+
+    #descricaoDetalhes {
+        width: 40%;
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-y: auto;
+    }
+
+</style>
+
+
+
+<h1>Análises</h1>
+<a href="Analise/Criar" class="btn btn-primary"><i class="bi bi-plus"></i>Criar</a>
+<a href="Nota/Index" class="btn btn-secondary">Gerenciar Critérios de Avaliação</a>
+
+<hr>
+
+<div style="display: flex; gap: 10px;">
+
+    <div class="porratoda">
+
+        <div style="display: flex; gap: 10px;">
+            <h5>Filtros</h5>
+            <button class="btn btn-link btn-sm" data-bs-toggle="collapse" data-bs-target="#filtrosCollapse">
+                <i class="bi bi-chevron-down"></i>
+            </button>
+        </div>
+
+        @if (ViewData.ModelState.ContainsKey("DataInvalida"))
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @ViewData.ModelState["DataInvalida"].Errors.FirstOrDefault()?.ErrorMessage
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div id="filtrosCollapse" class="collapse mt-2">
+            <form method="get">
+                <div class="filtros">
+                    <div class="form-group">
+                        <label for="PlayerId">Player</label>
+                        <select name="PlayerId" id="PlayerId" class="form-control">
+                            <option value="">Selecione um Player</option>
+                            @foreach (var player in ViewBag.Players)
+                            {
+                                <option value="@player.Id">@player.Nome</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="GrupoId">Grupo</label>
+                        <select name="GrupoId" id="GrupoId" class="form-control">
+                            <option value="">Selecione um Grupo</option>
+                            @foreach (var grupo in ViewBag.Grupos)
+                            {
+                                <option value="@grupo.Id">@grupo.Nome</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="DataInicio">Data Início</label>
+                        <input type="date" id="DataInicio" name="DataInicio" value="@Model.DataInicio?.ToString("yyyy-MM-dd")" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DataFim">Data Fim</label>
+                        <input type="date" id="DataFim" name="DataFim" value="@Model.DataFim?.ToString("yyyy-MM-dd")" class="form-control" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+                <a asp-action="Index" class="btn btn-secondary">Limpar</a>
+            </form>
+
+        </div>
+
+            <hr>
+
+            <h2>Análises de Grupos</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Grupo</th>
+                        <th>Detalhes</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var analise in ViewBag.AnalisesGrupo)
+                    {
+                        <tr>
+                            <td>@analise.Analise.Data.ToString("dd/MM/yyyy hh:mm")</td>
+                            <td>@analise.Grupo.Nome</td>
+                            <td>
+                                <a href="#"
+                                   data-toggle="modal"
+                                   data-target="#descricaoModal"
+                                   data-descricao="@analise.Analise.Descricao"
+                                   data-formacao="@analise.Formacao"
+                                   data-notas='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(((IEnumerable<dynamic>)analise.Analise.AnaliseNotas).Select(an => new { criterio = an.Nota.Nome, valor = an.Valor })))'>
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
+                            <td>
+                    
+                                <a href="#" 
+                                   class="btn btn-warning btn-sm btn-editar" 
+                                   data-id="@analise.Analise.Id" 
+                                   data-descricao="@analise.Analise.Descricao"
+                                   data-notas='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(((IEnumerable<dynamic>)analise.Analise.AnaliseNotas).Select(an => new { Id = an.Nota.Id, Nome = an.Nota.Nome, Valor = an.Valor })))'>
+                                    Editar
+                                </a>
+
+
+                                <a href="javascript:void(0);"
+                                   class="btn btn-danger btn-sm btn-excluir"
+                                   data-id="@analise.Analise.Id">
+                                    Excluir
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <br />
+            <br />
+            <br />
+            <br />
+
+            <h2>Análises de Players</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Player</th>
+                        <th>Detalhes</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var analise in ViewBag.AnalisesPlayer)
+                    {
+                        <tr>
+                            <td>@analise.Analise.Data.ToString("dd/MM/yyyy hh:mm")</td>
+                            <td>@analise.Player.Nome</td>
+                            <td>
+                                <a href="#"
+                                   data-toggle="modal"
+                                   data-target="#descricaoModal"
+                                   data-descricao="@analise.Analise.Descricao"
+                                   data-formacao=""
+                                   data-notas='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(((IEnumerable<dynamic>)analise.Analise.AnaliseNotas).Select(an => new { criterio = an.Nota.Nome, valor = an.Valor })))'>
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#"
+                                   class="btn btn-warning btn-sm btn-editar"
+                                   data-id="@analise.Analise.Id"
+                                   data-descricao="@analise.Analise.Descricao"
+                                   data-notas='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(((IEnumerable<dynamic>)analise.Analise.AnaliseNotas).Select(an => new { Id = an.Nota.Id, Nome = an.Nota.Nome, Valor = an.Valor })))'>
+                                    Editar
+                                </a>
+                                <a href="javascript:void(0);"
+                                   class="btn btn-danger btn-sm btn-excluir"
+                                   data-id="@analise.Analise.Id">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <br />
+            <br />
+            <br />
+            <br />
+
+            <h2>Análises de Players em Grupos</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Grupo</th>
+                        <th>Player</th>
+                        <th>Detalhes</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var analise in ViewBag.AnalisesPlayerGrupo)
+                    {
+                        <tr>
+                            <td>@analise.Analise.Data.ToString("dd/MM/yyyy hh:mm")</td>
+                            <td>@analise.Grupo.Nome</td>
+                            <td>@analise.Player.Nome</td>
+                            <td>
+                                <a href="#"
+                                   data-toggle="modal"
+                                   data-target="#descricaoModal"
+                                   data-descricao="@analise.Analise.Descricao"
+                                   data-formacao="@analise.Formacao"
+                                   data-notas='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(((IEnumerable<dynamic>)analise.Analise.AnaliseNotas).Select(an => new { criterio = an.Nota.Nome, valor = an.Valor })))'>
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#"
+                                   class="btn btn-warning btn-sm btn-editar"
+                                   data-id="@analise.Analise.Id"
+                                   data-descricao="@analise.Analise.Descricao"
+                                   data-notas='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(((IEnumerable<dynamic>)analise.Analise.AnaliseNotas).Select(an => new { Id = an.Nota.Id, Nome = an.Nota.Nome, Valor = an.Valor })))'>
+                                    Editar
+                                </a>
+                                <a href="javascript:void(0);"
+                                   class="btn btn-danger btn-sm btn-excluir"
+                                   data-id="@analise.Analise.Id">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+
+            
+
+            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Editar Análise</h5>
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" aria-label="Fechar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editForm">
+                                <input type="hidden" id="editAnaliseId" name="AnaliseId" />
+                                <div class="form-group">
+                                    <label for="editDescricao">Descrição</label>
+                                    <textarea id="editDescricao" name="Descricao" class="form-control"></textarea>
+                                </div>
+                                <div style="display:none">
+                                <h5>Notas</h5>
+                                <div id="editNotasContainer">
+                        
+                                </div>
+                                </div>
+                                <button type="button" class="btn btn-primary" id="saveChanges">Salvar Alterações</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+
+    <div id="descricaoDetalhes" style="width: 40%; border: 1px solid #ccc; padding: 15px; border-radius: 5px;">
+        <h3>Detalhes da Análise</h3>
+        <p>Selecione uma análise para visualizar os detalhes aqui.</p>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('[data-target="#descricaoModal"]').forEach(button => {
+            button.addEventListener("click", function () {
+                const descricao = this.getAttribute("data-descricao");
+                const formacao = this.getAttribute("data-formacao");
+                const notas = JSON.parse(this.getAttribute("data-notas"));
+
+                const detalhesDiv = document.getElementById("descricaoDetalhes");
+                detalhesDiv.innerHTML = `
+                    <h3>Detalhes da Análise</h3>
+                    <h5>Descrição:</h5>
+                    <p>${descricao}</p>
+                    <br />
+                    ${formacao
+                        ? `<h5>Formação do Grupo:</h5><p>${formacao}</p><br />`
+                        : ""
+                    }
+                    <h5>Notas:</h5>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Critério</th>
+                                <th>Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${notas.length > 0
+                        ? notas
+                            .map(
+                                nota => `
+                                <tr>
+                                    <td>${nota.criterio}</td>
+                                    <td>${nota.valor}</td>
+                                </tr>
+                            `
+                            )
+                            .join("")
+                        : `<tr><td colspan="2">Nenhuma nota encontrada</td></tr>`
+                    }
+                        </tbody>
+                    </table>
+                `;
+            });
+        });
+    });
+
+
+
+    // Função de exclusão com confirmação
+    document.addEventListener("DOMContentLoaded", function () {
+        // Selecionar todos os botões de exclusão
+        const deleteButtons = document.querySelectorAll(".btn-excluir");
+
+        deleteButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const analiseId = this.getAttribute("data-id"); // ID da análise
+            if (confirm("Tem certeza que deseja excluir esta análise?")) {
+                // Chamada AJAX para exclusão
+                fetch(`/Analise/Delete/${analiseId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("Análise excluída com sucesso!");
+                            location.reload(); // Recarregar a página
+                        } else {
+                            alert("Ocorreu um erro ao tentar excluir a análise.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Erro:", error);
+                        alert("Ocorreu um erro ao tentar excluir a análise.");
+                    });
+            }
+        });
+        });
+    });
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".btn-editar").forEach(button => {
+            button.addEventListener("click", function () {
+                const analiseId = this.getAttribute("data-id");
+                const descricao = this.getAttribute("data-descricao");
+                const notas = JSON.parse(this.getAttribute("data-notas"));
+
+                // Preencher os campos do modal
+                document.getElementById("editAnaliseId").value = analiseId;
+                document.getElementById("editDescricao").value = descricao;
+
+                const notasContainer = document.getElementById("editNotasContainer");
+                notasContainer.innerHTML = "";
+
+                notas.forEach(nota => {
+                    notasContainer.innerHTML += `
+                        <div class="form-group">
+                            <label>${nota.Nome}</label>
+                            <input type="hidden" name="Notas[${nota.Id}].NotaId" value="${nota.Id}" />
+                            <input type="number" name="Notas[${nota.Id}].Valor" class="form-control" value="${nota.Valor}" step="0.1" />
+                        </div>
+                    `;
+                });
+
+                // Abrir o modal
+                $('#editModal').modal('show');
+            });
+        });
+
+        document.getElementById("saveChanges").addEventListener("click", function () {
+            const formData = new FormData(document.getElementById("editForm"));
+
+            fetch("/Analise/Edit", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Análise atualizada com sucesso!");
+                        location.reload();
+                    } else {
+                        alert("Erro ao atualizar a análise.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro:", error);
+                    alert("Erro ao atualizar a análise.");
+                });
+        });
+    });
+
+
+
+</script>

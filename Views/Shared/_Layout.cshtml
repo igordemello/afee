@@ -1,0 +1,215 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AFEE</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/shared.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="~/js/site.js" asp-append-version="true">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+
+
+<body>
+    <nav class="menu-vertical close">
+        <header>
+            <div class="texto-imagem">
+                <span class="imagem">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">
+                        <img id="logo" alt="afee" class="logomenu" src="/img/LogoAFEE.png" />
+                    </a>
+                </span>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i> 
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                
+                @if (User.IsInRole("Treinador"))
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Treinador")">
+                            <i class="fas fa-home icon"></i>
+                            <span class="text ">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("CrudPlayer", "Player")">
+                            <i class="fa fa-user icon" aria-hidden="true"></i>
+                            <span class="text ">Players</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Grupo")">
+                            <i class="fa fa-users icon" aria-hidden="true"></i>
+                            <span class="text ">Grupos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("TreinadorTreinos", "Treino")">
+                            <i class="fa-solid fa-calendar-days icon"></i>
+                            <span class="text ">Treinos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Estrategia")">
+                            <i class="fa-regular fa-pen-to-square icon"></i>
+                            <span class="text ">Estrategias</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Torneio")">
+                            <i class="fa-solid fa-trophy icon"></i>
+                            <span class="text ">Torneios</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Analise")">
+                            <i class="fa-regular fa-clipboard icon"></i>
+                            <span class="text ">Análises</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Fase")">
+                            <i class="fa-solid fa-layer-group icon"></i>
+                            <span class="text ">Fases</span>
+                        </a>
+                    </li>
+                    <hr></hr>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Selecao")">
+                            <i class="fa-solid fa-sitemap icon"></i>
+                            <span class="text ">Seleções</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item nav-fase">
+                        <p class="text-fase text">
+                            Fase(s):<br /> @await Component.InvokeAsync("NomeFase")
+                        </p>
+                    </li>
+                }
+                else if (User.IsInRole("Player"))
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("PlayerIndex", "player")">
+                            <i class="fas fa-home icon"></i>
+                            <span class="text ">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("PlayerTreinos", "Treino")">
+                            <i class="fas fa-calendar-alt icon"></i>
+                            <span class="text ">Treinos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Estrategia")">
+                            <i class="fa-regular fa-pen-to-square icon"></i>
+                            <span class="text ">Estrategias</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Torneio")">
+                            <i class="fa-solid fa-trophy icon"></i>
+                            <span class="text ">Torneios</span>
+                        </a>
+                    </li>
+                        <hr></hr>
+                    
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "Selecao")">
+                                <i class="fa-solid fa-sitemap icon"></i>
+                                <span class="text ">Seleções</span>
+                            </a>
+                        </li>
+                    
+                                                                          
+                }
+                else if (User.IsInRole("Organizador"))
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("OrganizadorIndex", "Home")">
+                            <i class="fas fa-home icon"></i>
+                            <span class="text ">Home</span>
+                        </a>
+                    </li>
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("CrudPlayer", "Player")">
+                            <i class="bi bi-people-fill icon"></i>
+                            <span class="text ">Players</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("CrudTreinador", "Treinador")">
+                            <i class="fas fa-chalkboard-teacher icon"></i>
+                            <span class="text ">Treinadores</span>
+                        </a>
+                    </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "Fase")">
+                                <i class="bi bi-ladder icon"></i>
+                                <span class="text ">Fases</span>
+                            </a>
+                        </li>
+                }
+            </div>
+
+            <div class="bottom-content">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="texto-imagem">
+                        <span class="imagem-user">
+                            <a asp-area="Identity" asp-page="/Account/Manage/Index">
+                                <i class='bx bx-user-circle user-icone'></i>
+                            </a>
+                        </span>
+
+                        <div class="text cabecalho-texto">
+                            <a class="nav-link text usuario-texto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Olá, @User.Identity?.Name!</a>
+                        </div>
+                    </div>
+                }
+
+                <li class="login">
+                    <partial name="_LoginPartial" />
+                </li>
+
+                <li class="dark-mode">
+                    <div class="moon-sun">
+                        <i class="bi bi-moon-stars moon"></i>
+                        <i class="bi bi-sun sun"></i>
+                    </div>
+                    <span class="mode-text text">Modo Escuro</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </section>
+
+    @RenderSection("Scripts", required: false)
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>

@@ -1,0 +1,21 @@
+﻿@using tcc_in305b.ViewModels
+@model AdicionarPlayerViewModel
+
+<h2>Adicionar Jogador à Fase</h2>
+
+<form method="post" asp-action="AdicionarPlayer">
+    <input type="hidden" name="faseId" value="@Model.FaseId" />
+
+    <div style="display:flex;">
+        <label for="playerId" style="margin-right:15px">Selecione um Jogador:</label>
+        <select name="playerId" id="playerId" class="form-select" style="max-width: 250px; margin-right:15px">
+            <option value="">Selecione</option>
+            @foreach (var jogador in Model.Jogadores)
+            {
+                <option value="@jogador.Id">@jogador.Nome</option>
+            }
+        </select>
+
+        <button type="submit" class="btn btn-outline-success">Adicionar</button>
+    </div>
+</form>

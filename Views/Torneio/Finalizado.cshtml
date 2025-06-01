@@ -1,0 +1,195 @@
+﻿@model Torneio
+
+<style>
+    .graficos {
+        display: flex; /* Torna o container flexível */
+        justify-content: space-between; /* Espaço entre os gráficos */
+        align-items: flex-start; /* Alinhar os gráficos ao topo */
+        gap: 20px; /* Espaço entre as divs internas */
+    }
+
+        .graficos .grafico1, .graficos .grafico2 {
+            flex: 1; /* Cada gráfico ocupa o mesmo espaço */
+            max-width: 50%; /* Limita a largura de cada gráfico */
+        }
+
+    canvas {
+        max-width: 100%; /* Ajusta o tamanho do canvas dentro do limite da div */
+        height: auto; /* Mantém a proporção */
+    }
+
+    #graficoDiferencaPontos {
+        width: 600px; /* Define a largura máxima */
+        height: 300px; /* Define a altura máxima */
+        margin: 0 auto; /* Centraliza o gráfico */
+    }
+
+    #heatmap {
+        width: 600px; /* Define a largura máxima */
+        height: 300px; /* Define a altura máxima */
+        margin: 0 auto; /* Centraliza o gráfico */
+    }
+
+    
+</style>
+
+<h2>Torneio Finalizado</h2>
+
+<p><strong>Vencedor:</strong> @ViewBag.Vencedor</p>
+<p><strong>Torneio:</strong> @Model.Nome</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Rodada</th>
+            <th>Equipe 1</th>
+            <th>Pontuação</th>
+            <th>Equipe 2</th>
+            <th>Pontuação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var chaveamento in Model.Chaveamentos.OrderBy(c => c.Data))
+        {
+            foreach (var partida in chaveamento.Partidas)
+            {
+                <tr>
+                    <td>@chaveamento.Nome</td>
+                    <td>@partida.EquipePartidas.First().Equipe.Nome</td>
+                    <td>@partida.EquipePartidas.First().Pontuacao</td>
+                    <td>@partida.EquipePartidas.Last().Equipe.Nome</td>
+                    <td>@partida.EquipePartidas.Last().Pontuacao</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Index", "Torneio")" class="btn btn-primary">Voltar</a>
+
+
+<br />
+<br />
+<br />
+
+<div class="graficos">
+<div class="grafico1">
+<h5>Somatório da diferença total de pontos das equipes:</h5>
+<canvas id="graficoDiferencaPontos"></canvas>
+</div>
+
+<div class="grafico2">
+<h5>Diferença de pontos por rodada:</h5>
+<canvas id="heatmap"></canvas>
+</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Dados do backend serializados
+    var diferencasData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Diferencas));
+
+    // Preparar os arrays para equipes e soma das diferenças
+    var equipes = diferencasData.map(d => d.Equipe);
+    var diferencas = diferencasData.map(d => d.SomaDiferenca);
+
+    // Configurar o gráfico
+    var ctx = document.getElementById('graficoDiferencaPontos').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: equipes, // Nomes das equipes
+            datasets: [{
+                label: 'Diferença Total de Pontos',
+                data: diferencas, // Valores das diferenças
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true, // Mantém a proporção do gráfico
+            aspectRatio: 1.5, // Altera a proporção (largura/altura)
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+<script>
+    // Dados do backend
+    var rodadas = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Rodadas)); // ["Quartas de Final", ...]
+    var equipes = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Equipes)); // ["A", "B", ...]
+    var valores = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Valores)); // [{Equipe: "A", Rodada: "Quartas de Final", Diferenca: -12}, ...]
+
+    // Paleta de cores para as equipes
+    var colors = [
+        'rgba(255, 99, 132, 1)', // Vermelho
+        'rgba(54, 162, 235, 1)', // Azul
+        'rgba(255, 206, 86, 1)', // Amarelo
+        'rgba(75, 192, 192, 1)', // Verde
+        'rgba(153, 102, 255, 1)', // Roxo
+        'rgba(201, 203, 207, 1)', // Cinza
+        'rgba(255, 159, 64, 1)',  // Laranja
+        'rgba(100, 149, 237, 1)'  // Azul claro
+    ];
+
+    // Organizar os dados para o gráfico de linhas
+    var datasets = equipes.map((equipe, index) => {
+        return {
+            label: equipe,
+            data: rodadas.map(rodada => {
+                var valor = valores.find(v => v.Equipe === equipe && v.Rodada === rodada);
+                return valor ? valor.Diferenca : 0; // Preencher com 0 se não houver valor
+            }),
+            borderColor: colors[index % colors.length], // Cor sólida para a linha
+            backgroundColor: colors[index % colors.length], // Cor da área abaixo da linha (opcional)
+            fill: false, // Não preencher abaixo da linha
+            tension: 0.4 // Suavizar a curva das linhas
+        };
+    });
+
+    // Criar o gráfico de linhas
+    var ctx = document.getElementById('heatmap').getContext('2d');
+    new Chart(ctx, {
+        type: 'line', // Mudar o tipo de gráfico para 'line'
+        data: {
+            labels: rodadas, // Rodadas no eixo X
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true, // Mantém a proporção do gráfico
+            aspectRatio: 1.5, // Ajusta a proporção largura/altura
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Rodadas' // Título do eixo X
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Diferença' // Título do eixo Y
+                    }
+                }
+            }
+        }
+    });
+</script>

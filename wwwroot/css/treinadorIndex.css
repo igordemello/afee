@@ -1,0 +1,477 @@
+﻿@charset "UTF-8";
+body.light {
+  --color-text: black;
+  --color-text-invert: white;
+  --color-background: #fffefe;
+  --color-background2: #e8edef;
+  --color-background3: #fff;
+  --color-text2: #272727;
+  --color-text3: #0f0f0f;
+  --filter: none;
+  --rgba-calendar: rgba(0,0,0,0.3);
+  --body-color: #E4E9F7;
+  --sidebar-color: #FFF;
+  --primary-color: #f0f8ff;
+  --primary-color-light: #F6F5FF;
+  --toggle-color: #DDD;
+}
+
+body.dark {
+  --color-text: white;
+  --color-text-invert: black;
+  --color-background: #0f0f0f;
+  --color-background2: #272727;
+  --color-background3: #000;
+  --color-text2: #272727;
+  --color-text3: #fffefe;
+  --filter: invert(1);
+  --rgba-calendar: rgba(255,255,255,0.3);
+  --body-color: #18191A;
+  --sidebar-color: #242526;
+  --primary-color: #3A3B3C;
+  --primary-color-light: #3A3B3C;
+  --toggle-color: #FFF;
+  --color-text: #CCC;
+  color: var(--color-text);
+}
+
+.topcontent {
+  display: flex;
+  justify-content: center; /* Centraliza o conteúdo */
+  align-items: flex-start; /* Alinha os itens ao topo */
+  gap: 40%; /* Espaço entre o calendário e a lista */
+}
+
+#calendar {
+  width: 100%;
+  margin-top: 60px !important;
+  margin: 0;
+  font-size: 14px;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  margin-top: 50px;
+}
+
+/* Container da lista de jogadores */
+.listaplayers {
+  width: 300px; /* Largura fixa para a lista */
+  height: 477px; /* Altura fixa da lista de jogadores */
+}
+
+/* Contêiner da tabela com rolagem */
+.table-scroll-container {
+  width: 100%; /* A largura da tabela será 100% do seu contêiner */
+  max-height: 371px; /* Altura máxima do contêiner da tabela */
+  overflow-y: auto; /* Ativa a rolagem vertical se o conteúdo ultrapassar a altura definida */
+  overflow-x: hidden; /* Desativa a rolagem horizontal */
+}
+
+/* Barra de rolagem personalizada para a tabela */
+.table-scroll-container::-webkit-scrollbar {
+  width: 10px; /* Largura da barra de rolagem vertical */
+  height: 10px; /* Largura da barra de rolagem horizontal */
+}
+
+/* Estilo da trilha da barra de rolagem */
+.table-scroll-container::-webkit-scrollbar-track {
+  background: var(--color-background3); /* Cor de fundo da trilha */
+  border-radius: 10px;
+}
+
+/* Estilo do thumb da barra de rolagem (parte arrastável) */
+.table-scroll-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-text); /* Cor do thumb */
+  border-radius: 10px;
+  border: 3px solid var(--color-background); /* Borda ao redor do thumb */
+}
+
+/* Estilo do thumb quando o mouse está sobre ele */
+.table-scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text2); /* Cor do thumb ao passar o mouse */
+}
+
+/* Para a barra de rolagem horizontal, caso ela apareça */
+.table-scroll-container::-webkit-scrollbar-thumb:horizontal {
+  background-color: var(--color-text); /* Cor do thumb horizontal */
+  border-radius: 10px;
+}
+
+.listaplayers-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.listaplayers-header h2 {
+  margin: 0;
+}
+
+.listaplayers-header .btn {
+  margin-left: 10px; /* Espaço entre o título e o botão */
+  padding: 2px 8px; /* Ajusta o espaçamento interno do botão */
+  height: fit-content; /* Ajusta a altura do botão */
+  font-size: 14px; /* Ajusta o tamanho da fonte para combinar com o título */
+}
+
+#descricaoModalContent {
+  word-wrap: break-word; /* Quebra o texto longo em palavras */
+  white-space: normal; /* Permite quebra de linha */
+}
+
+/* Estilo para tarefas concluídas */
+.tarefa-concluida {
+  opacity: 0.5; /* Reduz a opacidade do texto para tarefas concluídas */
+  text-decoration: line-through; /* Texto tachado */
+}
+
+.modal-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.elosimg {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.elosimg .bi-arrow-right {
+  font-size: 50px;
+}
+
+.elocriacao, .eloatual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eloatual {
+  margin-left: 20.98px;
+}
+
+.estatisticas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  row-gap: 0;
+  width: 100%;
+}
+
+.estatisticas p {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  flex: 0 1 calc(50% - 10px);
+}
+
+.icon-menu-players, .icon-todo {
+  color: var(--color-text);
+}
+
+.icon-todo {
+  font-size: 25px;
+}
+
+.flatpickr-calendar {
+  background-color: var(--color-background3); /* Fundo preto */
+}
+
+.flatpickr-day:hover, .flatpickr-day.selected {
+  background-color: var(--color-background2); /* Fundo cinza escuro */
+  color: var(--color-text); /* Texto branco */
+}
+
+.flatpickr-time input {
+  background-color: var(--color-background3);
+  color: #fff;
+}
+
+.flatpickr-calendar .flatpickr-day {
+  color: var(--color-text);
+}
+
+.flatpickr-months .flatpickr-month {
+  color: var(--color-text);
+  background-color: var(--color-background3);
+}
+
+.flatpickr-calendar .flatpickr-time input {
+  background-color: var(--color-background3); /* Fundo do input de horário */
+  color: var(--color-text);
+}
+
+.flatpickr-weekdays .flatpickr-weekday {
+  background-color: var(--color-background2); /* Fundo dos dias da semana (Seg, Ter, etc.) */
+  color: var(--color-text);
+}
+
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-decoration: none;
+  cursor: pointer;
+  position: absolute;
+  top: -4px;
+  height: 34px;
+  padding: 10px;
+  z-index: 3;
+  color: var(--color-text);
+  fill: var(--color-text);
+}
+
+.flatpickr-months .flatpickr-prev-month:hover,
+.flatpickr-months .flatpickr-next-month:hover {
+  color: var(--color-text2);
+}
+
+.flatpickr-months .flatpickr-prev-month:hover svg,
+.flatpickr-months .flatpickr-next-month:hover svg {
+  fill: var(--color-text2);
+}
+
+.flatpickr-months .flatpickr-prev-month i,
+.flatpickr-months .flatpickr-next-month i {
+  position: relative;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  appearance: menulist;
+  background: var(--color-background3);
+  border: none;
+  border-radius: 0;
+  box-sizing: border-box;
+  color: inherit;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 300;
+  height: auto;
+  line-height: inherit;
+  margin: -1px 0 0 0;
+  outline: none;
+  padding: 0 0 0 0.5ch;
+  position: relative;
+  vertical-align: initial;
+  -webkit-box-sizing: border-box;
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
+  width: auto;
+}
+
+flatpickr-current-month .flatpickr-monthDropdown-months:focus,
+.flatpickr-current-month .flatpickr-monthDropdown-months:active {
+  outline: none;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months:hover {
+  background: rgba(192, 187, 167, 0.05);
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+  background-color: var(--color-background);
+  outline: none;
+  padding: 0;
+}
+
+span.flatpickr-weekday {
+  cursor: default;
+  font-size: 90%;
+  background: #3f4458;
+  color: #fff;
+  line-height: 1;
+  margin: 0;
+  text-align: center;
+  display: block;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  font-weight: bolder;
+}
+
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay,
+.flatpickr-day.notAllowed,
+.flatpickr-day.notAllowed.prevMonthDay,
+.flatpickr-day.notAllowed.nextMonthDay {
+  color: var(--rgba-calendar);
+  background: transparent;
+  border-color: transparent;
+  cursor: default;
+}
+
+.flatpickr-day.prevMonthDay:hover,
+.flatpickr-day.nextMonthDay:hover {
+  background-color: var(--color-background);
+}
+
+.flatpickr-time .numInputWrapper span.arrowUp:after {
+  border-bottom-color: var(--color-text);
+}
+
+.flatpickr-time .numInputWrapper span.arrowDown:after {
+  border-top-color: var(--color-text);
+}
+
+.flatpickr-time .flatpickr-am-pm {
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.flatpickr-time .flatpickr-am-pm:hover {
+  background-color: var(--color-background2);
+}
+
+.flatpickr-current-month .numInputWrapper span.arrowUp:after {
+  border-bottom-color: var(--color-text);
+}
+
+.flatpickr-current-month .numInputWrapper span.arrowDown:after {
+  border-top-color: var(--color-text);
+}
+
+.fc-daygrid-day {
+  border: 2px solid var(--color-text) !important; /* Borda */
+}
+
+.fc-button {
+  background-color: var(--color-text2) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.fc-button:hover {
+  background-color: var(--rgba-calendar) !important;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: var(--color-text) !important; /* Cor personalizada */
+  background-color: var(--color-background);
+  font-size: 14px; /* Ajustar o tamanho da fonte, se necessário */
+  font-weight: bold; /* Deixar em negrito, se desejado */
+}
+
+.fc-daygrid-day-number {
+  color: var(--color-text) !important; /* Azul SteelBlue (cor personalizada) */
+  font-size: 14px; /* Ajusta o tamanho da fonte */
+  font-weight: bold; /* Se quiser deixar o número em negrito */
+}
+
+.fc-day-today .fc-daygrid-day {
+  font-weight: bold; /* Negrito para destaque */
+}
+
+.fc .fc-daygrid {
+  border: 2px solid var(--color-text); /* Borda do calendário (exterior) */
+}
+
+.fc .fc-col-header-cell {
+  background-color: var(--color-background);
+  border: 2px solid var(--color-text); /* Borda ao redor dos nomes dos dias da semana */
+  padding: 5px; /* Espaçamento interno para os dias da semana */
+}
+
+#calendar {
+  height: 400px; /* Altura fixa para o contêiner do calendário */
+  overflow: hidden; /* Remove a rolagem */
+}
+
+.fc-theme-standard .fc-scrollgrid,
+.fc-daygrid-body,
+.fc-daygrid-day-frame {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.fc-daygrid {
+  height: 100%;
+  overflow: hidden !important;
+}
+
+.fc-daygrid-day-top {
+  height: auto;
+  padding: 0; /* Remove o espaço adicional no topo */
+  overflow: hidden !important;
+}
+
+.titulocalendar {
+  position: absolute;
+}
+
+/* CSS da checkbox do to-do*/
+.checkbox-wrapper-39 *,
+.checkbox-wrapper-39 *::before,
+.checkbox-wrapper-39 *::after {
+  box-sizing: border-box;
+}
+
+.checkbox-wrapper-39 label {
+  display: block;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.checkbox-wrapper-39 input {
+  visibility: hidden;
+  display: none;
+}
+
+.checkbox-wrapper-39 input:checked ~ .checkbox {
+  transform: rotate(45deg);
+  width: 14px;
+  margin-left: 27px;
+  border-color: green;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-radius: 0;
+}
+
+.checkbox-wrapper-39 .checkbox {
+  display: block;
+  margin-left: 20px;
+  width: inherit;
+  height: inherit;
+  border: 3px solid var(--color-text);
+  border-radius: 6px;
+  transition: all 0.375s;
+}
+
+.legend-text {
+  color: var(--color-text);
+}
+
+.calendar-legend {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-left: 9.5%;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
+.container {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}

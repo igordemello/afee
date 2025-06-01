@@ -1,0 +1,48 @@
+﻿@model tcc_in305b.ViewModels.FaseTreinadorViewModel
+<h2>Fases</h2>
+
+    <a asp-action="Create" class="btn btn-primary">Criar Nova Fase</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fase</th>
+            <th>Treinadores</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var fase in Model.FaseDetalhes)
+        {
+            <tr>
+                <td>@fase.FaseNome</td>
+                <td>@string.Join(", ", fase.TreinadoresNomes)</td>
+                <td>@fase.Status</td>
+                <td>
+                    <a href="@Url.Action("Detalhes", "Fase", new { id = fase.FaseId })" class="btn btn-info" style=" color: white;">Detalhes</a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                        <a href="@Url.Action("Edit", "Fase", new { id = fase.FaseId })" class="btn btn-warning" style=" color: white;">Editar</a>
+                        <form action="@Url.Action("Delete", "Fase", new { faseId = fase.FaseId })" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir a Fase: @fase.FaseNome?')">
+                                Excluir
+                            </button>
+                        </form>
+                        }
+                        else if (User.IsInRole("Treinador"))
+                        {
+                            <form action="@Url.Action("Delete", "Fase", new { faseId = fase.FaseId })" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja sair da Fase: @fase.FaseNome?')">
+                                Sair
+                            </button>
+                            </form>
+                        }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

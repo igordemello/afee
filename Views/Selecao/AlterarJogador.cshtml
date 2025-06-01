@@ -1,0 +1,28 @@
+﻿@model tcc_in305b.ViewModels.AlterarJogadorViewModel
+
+<h2>Alterar Jogador em Equipes</h2>
+<form asp-action="AlterarJogador" method="post">
+    <div class="form-group">
+        <label>Nome do Jogador a Mover</label>
+        <select name="playerToMoveNome" class="form-control" required>
+            <option value="">Selecione um jogador</option>
+            @foreach (var jogador in ViewBag.Jogadores)
+            {
+                <option value="@jogador.Text">@jogador.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Nome do Jogador a Substituir</label>
+        <select name="playerToReplaceNome" class="form-control" required>
+            <option value="">Selecione um jogador</option>
+            @foreach (var jogador in ViewBag.Jogadores)
+            {
+                <option value="@jogador.Text">@jogador.Text</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Alterar Jogador</button>
+</form>

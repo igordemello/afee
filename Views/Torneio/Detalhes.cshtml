@@ -1,0 +1,205 @@
+﻿@model Torneio
+
+<style>
+    .equipes {
+        max-width: 30%;
+    }
+</style>
+
+
+<h2>Detalhes do Torneio: @Model.Nome</h2>
+
+<div>
+    <div>
+        <h5>Informações do Torneio</h5>
+        <p><strong>Tipo:</strong> @Model.Tipo</p>
+        <p><strong>Data de Início:</strong> @Model.DataInicio.ToString("dd/MM/yyyy")</p>
+        <p><strong>Data de Fim:</strong> @(Model.DataFim?.ToString("dd/MM/yyyy") ?? "Em andamento")</p>
+        <p><strong>Quantidade de equipes:</strong> @Model.QuantidadeEquipes</p>
+    </div>
+</div>
+
+<h4>Equipes</h4>
+
+@if (Model.DataFim == null)
+{
+    if (User.IsInRole("Treinador"))
+    {
+        <button type="button" class="btn btn-outline-primary btn-sm direita" data-bs-toggle="modal" data-bs-target="#addEquipeModal">
+            Criar Equipe
+        </button>
+    }
+    <button class="btn btn-link btn-sm" data-bs-toggle="collapse" data-bs-target="#equipesCollapse">
+        <i class="bi bi-chevron-down"></i>
+    </button>
+    <br />
+    <br />
+}
+@if (ViewBag.Equipes != null)
+{
+    <div id="equipesCollapse" class="collapse mt-2">
+        @if (User.IsInRole("Treinador"))
+        {
+        <!--TENHO QUE RESOLVER ESSAS MERDAS DEPOIS-->
+        <a asp-action="AdicionarJogadorLivre" asp-route-torneioId="@Model.Id" class="btn btn-secondary">Alocar Jogador Livre</a>
+        <a asp-action="TrocarJogadores" asp-route-torneioId="@Model.Id" class="btn btn-secondary">Trocar Jogadores</a>
+        <a asp-action="AlterarJogador" asp-route-torneioId="@Model.Id" class="btn btn-secondary">Alterar Jogador</a>
+        <!--até aqui-->
+        <a asp-action="RemoverJogador" class="btn btn-secondary">Remover Jogador</a>
+        }
+        <table class="table titulo-equipe direita">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Status</th>
+                    <th>Data de Criação</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var equipe in ViewBag.Equipes)
+                {
+                    <tr>
+                        <td>@equipe.Nome</td>
+                        <td>@equipe.Status</td>
+                        <td>@equipe.DtCriacao.ToShortDateString()</td>
+                        <td>
+
+                            <button class="btn btn-link btn-sm" data-bs-toggle="collapse" data-bs-target="#equipe-@equipe.Id">
+                                <i class="bi bi-chevron-down"></i>
+                            </button>
+                            @if (User.IsInRole("Treinador"))
+                            {
+                            <a asp-action="DetailsEquipe" asp-route-id="@equipe.Id" class="btn btn-outline-info"><i class="bi bi-info"></i></a>
+                            <a asp-action="Edit" asp-route-id="@equipe.Id" class="btn btn-outline-warning"><i class="bi bi-pencil"></i></a>
+                            <a asp-action="Delete" asp-route-id="@equipe.Id" class="btn btn-outline-danger"><i class="bi bi-trash3"></i></a>
+                            }
+                        </td>
+                    </tr>
+
+                    <tr id="equipe-@equipe.Id" class="collapse mt-2">
+                        <td colspan="4" style="border-top: 1px solid #ddd; padding-top: 10px;">
+                            <strong>Jogadores:</strong>
+                            @if (ViewBag.PlayersEquipe != null)
+                            {
+                                var jogadoresDaEquipe = ((IEnumerable<Player>)ViewBag.PlayersEquipe).Where(p => p.EquipeId == equipe.Id);
+                                if (jogadoresDaEquipe.Any())
+                                {
+                                    foreach (var jogador in jogadoresDaEquipe)
+                                    {
+                                        <div>@jogador.Nome</div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div>Sem jogadores</div>
+                                }
+                            }
+
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+
+    </div>
+}
+else if (Model.DataFim != null)
+{
+    <p>Seleção Finalizada</p>
+}
+else
+{
+    <p>Nenhuma equipe encontrada para esta seleção.</p>
+}
+
+<h3>Ações</h3>
+<div>
+    @if (Model.Chaveamentos.Any() && Model.DataFim == null)
+    {
+        <a asp-action="Chaveamento" asp-route-id="@Model.Id" class="btn btn-primary">Visualizar Chaveamento</a>
+    }
+    else if (Model.DataFim == null)
+    {
+        <a asp-action="GerarChaveamento" asp-route-id="@Model.Id" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#dataModal">Gerar Chaveamento</a>
+    }
+
+    @if (Model.DataFim != null)
+    {
+        <a asp-action="FinalizarTorneio" asp-route-torneioId="@Model.Id" class="btn btn-success">Resumo</a>
+    }
+</div>
+<a asp-action="Index" class="btn btn-secondary mt-3">Voltar</a>
+
+<!-- Modal para Selecionar a Data -->
+<div class="modal fade" id="dataModal" tabindex="-1" aria-labelledby="dataModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dataModalLabel">Escolha a Data da Primeira Rodada</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="dataForm">
+                    <div class="mb-3">
+                        <label for="dataRodada" class="form-label">Data da Primeira Rodada</label>
+                        <input type="date" class="form-control" id="dataRodada" name="dataRodada" required min="@Model.DataInicio.ToString("yyyy-MM-dd")">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmarData">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addEquipeModal" tabindex="-1" aria-labelledby="addEquipeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="CreateEquipe" asp-controller="Torneio" method="post">
+                <input type="hidden" name="torneioId" value="@Model.Id" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Criar Nova Equipe</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="NomeEquipe" class="form-label">Nome da Equipe</label>
+                        <input type="text" class="form-control" id="NomeEquipe" name="Nome" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('confirmarData').addEventListener('click', function () {
+        const dataRodada = document.getElementById('dataRodada').value;
+        const dataInicioTorneio = new Date('@Model.DataInicio.ToString("yyyy-MM-dd")');
+
+        if (!dataRodada) {
+            alert('Por favor, insira uma data.');
+            return;
+        }
+
+        const dataSelecionada = new Date(dataRodada);
+
+        if (dataSelecionada < dataInicioTorneio) {
+            alert(`A data selecionada não pode ser anterior à data de início do torneio (${dataInicioTorneio.toLocaleDateString()}).`);
+            return;
+        }
+
+        // Continuar o processo de envio para o backend
+        const torneioId = '@Model.Id';
+        const url = `/Torneio/GerarChaveamento?id=${torneioId}&dataPrimeiraRodada=${encodeURIComponent(dataRodada)}`;
+        window.location.href = url;
+    });
+</script>

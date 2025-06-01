@@ -1,0 +1,11 @@
+﻿@model tcc_in305b.Models.Player
+
+<h2>Deletar Player</h2>
+
+<p>Tem certeza que deseja deletar o jogador @Model.Nome e o usuário associado (@Model.User.Email)?</p>
+
+<form asp-action="DeletePlayer">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sim, deletar</button>
+    <a asp-action="CrudPlayer" class="btn btn-secondary">Cancelar</a>
+</form>

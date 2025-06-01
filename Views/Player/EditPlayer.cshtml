@@ -1,0 +1,83 @@
+﻿@model tcc_in305b.Models.Player
+
+<h2>Editar Player</h2>
+
+<form asp-action="EditPlayer">
+    <div class="form-group">
+        <label for="Nome">Nome</label>
+        <input type="text" class="form-control" asp-for="Nome" />
+    </div>
+    @if (User.IsInRole("Treinador") || User.IsInRole("Admin"))
+    { 
+    <div class="form-group">
+        <label for="Status">Status</label>
+        <select type="text" class="form-control" asp-for="Status">
+            <option value="@Model.Status">@Model.Status</option>
+                @if(Model.Status == "Ativo")
+                {
+                    <option value="Candidato">Candidato</option>
+                }
+                else if (Model.Status == "Candidato")
+                {
+                    <option value="Ativo">Ativo</option>
+                }
+            </select>
+    </div>
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="email" class="form-control" asp-for="User.Email" />
+        </div>
+    }
+    else
+    {
+       
+            <input type="hidden" class="form-control" asp-for="Status" />
+       
+            <input type="hidden" class="form-control" asp-for="User.Email" />
+       
+    }
+
+    <div class="form-group">
+        <label for="Nickname">Nickname</label>
+        <input type="text" class="form-control" asp-for="Nickname" />
+    </div>
+    <div class="form-group">
+        <label for="Tag">Tag</label>
+        <input type="text" class="form-control" asp-for="Tag" />
+    </div>
+
+    <div class="form-group">
+        <label for="Classe">Classe</label>
+        <select class="form-control" asp-for="Classe">
+            <option value="Duelista" selected="@(Model.Classe == "Duelista")">Duelista</option>
+            <option value="Controlador" selected="@(Model.Classe == "Controlador")">Controlador</option>
+            <option value="Sentinela" selected="@(Model.Classe == "Sentinela")">Sentinela</option>
+            <option value="Iniciador" selected="@(Model.Classe == "Iniciador")">Iniciador</option>
+        </select>
+        <span asp-validation-for="Classe" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="IGL">O Player é IGL(In Game Leader)?</label>
+        <select class="form-control" asp-for="IGL" required>
+            <option value="false" selected="@(Model.Classe == "false")" >Não</option>
+            <option value="true" selected="@(Model.Classe == "true")" >Sim</option>
+        </select>
+    </div>
+
+
+    <input type="hidden" asp-for="Id" />
+
+    
+    <input type="hidden" asp-for="UserId" />
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    @if (User.IsInRole("Treinador") || User.IsInRole("Admin"))
+    {
+        <a asp-action="CrudPlayer" class="btn btn-secondary">Voltar</a>
+    }
+    else
+    {
+        <a asp-action="PlayerIndex" class="btn btn-secondary">Voltar</a>
+    }
+</form>

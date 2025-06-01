@@ -1,0 +1,42 @@
+﻿@model Partida
+
+<h2>Inserir Pontuações</h2>
+
+<form asp-action="InserirPontuacao" method="post">
+    <input type="hidden" name="partidaId" value="@Model.Id" />
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        </div>
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Equipe</th>
+                <th>Pontuação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var equipePartida in Model.EquipePartidas)
+            {
+                if (equipePartida.Equipe != null) // Certifique-se de que o objeto não é nulo
+                {
+                    <tr>
+                        <td>@equipePartida.Equipe.Nome</td>
+                        <td>
+                            <input type="number" name="pontuacoes" class="form-control" value="@equipePartida.Pontuacao" />
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success">Salvar Pontuações</button>
+</form>

@@ -1,0 +1,124 @@
+﻿@model tcc_in305b.Models.Grupo
+
+<!-- jQuery (necessário para os plugins JavaScript do Bootstrap) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Popper.js (necessário para alguns componentes do Bootstrap) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<!-- JavaScript do Bootstrap -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+<style>
+    .conteudo{
+        display:flex;
+    }
+    .listplayer{
+        text-decoration:none;
+        color: inherit;
+    }
+
+    .listaanalise{
+        max-width: 500px;
+    }
+</style>
+
+
+<h2>Detalhes do Grupo</h2>
+
+<div>
+    <h4>Grupo</h4>
+    <hr />
+    <div class="conteudo">
+        <div class="grupo">
+            <dl class="row">
+                <dt class="col-sm-2">Nome</dt>
+                <dd class="col-sm-10">@Model.Nome</dd>
+
+                <dt class="col-sm-2">Treinador</dt>
+                <dd class="col-sm-10">
+                    @if (string.IsNullOrEmpty(Model.Treinador?.Nome))
+                    {
+                        <span>Sem Treinador</span>
+                    }
+                    else
+                    {
+                        <span>@Model.Treinador.Nome</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-2">Status</dt>
+                <dd class="col-sm-10">@Model.Status</dd>
+
+                <dt class="col-sm-2">Data de Criação</dt>
+                <dd class="col-sm-10">@Model.DtCriacao.ToShortDateString()</dd>
+
+                <dt class="col-sm-2">Tipo</dt>
+                <dd class="col-sm-10">@Model.Tipo</dd>
+            </dl>
+
+            <h4>Jogadores no Grupo</h4>
+            @if (ViewBag.Players != null && ViewBag.Players.Count > 0)
+            {
+                <ul>
+                    @foreach (var player in ViewBag.Players)
+                    {
+                        <li><a href="javascript:void(0);" class="listplayer" onclick="DetalharJogador(@player.Id)">@player.Nome</a></li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Nenhum jogador neste grupo.</p>
+            }
+        </div>
+        <div class="player" id="detalhesDoJogador">
+            
+        </div>
+    </div>
+</div>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
+</p>
+
+
+
+<script>
+    function DetalharJogador(id) {
+        fetch(`/Grupo/DetalharJogador?id=${id}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                let detalhesDiv = document.getElementById("detalhesDoJogador");
+                detalhesDiv.innerHTML = `
+                <h4>Informações do Player Selecionado:</h4>
+                <dl class="row" id="detalhesDoJogador">
+                    <dt class="col-sm-2">Nome</dt>
+                    <dd class="col-sm-10">${data.nome}</dd>
+
+                    <dt class="col-sm-2">Status</dt>
+                    <dd class="col-sm-10">${data.status}</dd>
+
+                    <dt class="col-sm-2">Nick</dt>
+                    <dd class="col-sm-10">${data.nickname}</dd>
+
+                    <dt class="col-sm-2">Tag</dt>
+                    <dd class="col-sm-10">${data.tag}</dd>
+
+                    @*
+                    <dt class="col-sm-2">Grupo Atual</dt>
+                    <dd class="col-sm-10">@Model.Nome</dd>
+
+                    <dt class="col-sm-2">Treinador Responsável</dt>
+                        <dd class="col-sm-10">@Model.Treinador.Nome</dd>*@
+                </dl>
+                    `;
+            })
+            .catch(error => {
+                console.error("Erro ao buscar os detalhes do jogador:", error);
+            });
+    }
+</script>

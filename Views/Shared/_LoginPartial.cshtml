@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<head>
+    <link rel="stylesheet" href="~/css/shared.css" />
+</head>
+
+@{
+    // Verificar se estamos na página de login do Identity
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+}
+
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item right">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn">
+                    <i class="bi bi-box-arrow-in-right" style="font-size:25px;"></i>
+                </button>
+            </form>
+        </li>
+    }
+    else
+    {
+
+        // Verifique se estamos na página de login do Identity
+        if (currentPage == "/Account/Login")
+        {
+            <li class="nav-item right">
+                <!-- Link para Home quando estiver na página de Login -->
+                <a class="btn" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house"></i></a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item right">
+                <!-- Botão de Login padrão -->
+                <a class="btn" asp-area="Identity" asp-page="/Account/Login">Entrar</a>
+            </li>
+        }
+    }
+</ul>

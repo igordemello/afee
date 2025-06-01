@@ -1,0 +1,87 @@
+﻿@model tcc_in305b.Models.Player
+
+<style>
+    .tudao {
+        display: flex; /* Define o layout flexbox */
+        justify-content: space-between; /* Espaçamento entre os itens */
+        align-items: flex-start; /* Alinha os itens no topo */
+        gap: 20px; /* Espaçamento entre os elementos */
+    }
+
+    .formulario, .listgrupos {
+        flex: 1; /* Faz com que ambos os itens ocupem o mesmo espaço */
+        max-width: 45%; /* Limita a largura para que não ultrapassem 45% do container */
+    }
+
+    
+</style>
+
+<div class="tudao">
+<div class="formulario">
+<h2>Adicionar Jogador Livre a um Grupo</h2>
+
+<form asp-action="AdicionarJogadorLivre" method="post">
+    <div class="form-group">
+        <label for="jogadorId">Selecionar Jogador Livre</label>
+        <select name="jogadorId" id="jogadorId" class="form-control" required>
+            <option value="">Selecione um jogador</option>
+            @foreach (var jogador in ViewBag.JogadoresLivres)
+            {
+                <option value="@jogador.Value">@jogador.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="grupoId">Selecionar Grupo</label>
+        <select name="grupoId" id="grupoId" class="form-control" required>
+            <option value="">Selecione um grupo</option>
+            @foreach (var grupo in ViewBag.Grupos)
+            {
+                <option value="@grupo.Value">@grupo.Text</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Adicionar ao Grupo</button>
+</form>
+</div>
+
+<div class="listgrupos">
+    <ul>
+        @foreach (var grupo in ViewBag.Grupos)
+        {
+            <li>
+                <strong>@grupo.Text</strong>
+                <ul>
+                    @{
+                        var grupoPlayers = ViewData["GrupoPlayers"] as Dictionary<int, List<Player>>;
+                    }
+
+                    @if (grupoPlayers != null)
+                    {
+                        int chaveGrupo;
+                        var chaveValida = int.TryParse(grupo.Value, out chaveGrupo);
+
+                        if (chaveValida && grupoPlayers.ContainsKey(chaveGrupo))
+                        {
+                            foreach (var player in grupoPlayers[chaveGrupo])
+                            {
+                                <li>@player.Nome</li>
+                            }
+                        }
+                        else
+                        {
+                            <li>Nenhum jogador encontrado.</li>
+                        }
+                    }
+                    else
+                    {
+                        <li>Erro: Dicionário de jogadores não encontrado.</li>
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
+</div>
+</div>

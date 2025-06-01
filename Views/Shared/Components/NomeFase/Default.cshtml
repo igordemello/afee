@@ -1,0 +1,12 @@
+﻿@if (Model is string)
+{
+    <p>@Model</p>
+}
+else if (Model is IEnumerable<string> fases && fases.Any())
+{
+    @string.Join(", ", fases)<br />
+}
+else
+{
+    <p>Sem Fase disponível.</p>
+}

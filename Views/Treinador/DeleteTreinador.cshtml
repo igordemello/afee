@@ -1,0 +1,11 @@
+﻿@model tcc_in305b.Models.Treinador
+
+<h2>Deletar Treinador</h2>
+
+<p>Tem certeza que deseja deletar o treinador @Model.Nome e o usuário associado (@Model.User.Email)?</p>
+
+<form asp-action="DeleteTreinador">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sim, deletar</button>
+    <a asp-action="CrudTreinador" class="btn btn-secondary">Cancelar</a>
+</form>

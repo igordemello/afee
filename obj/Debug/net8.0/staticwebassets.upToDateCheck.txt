@@ -1,0 +1,131 @@
+wwwroot\blanka.otf
+wwwroot\css\alogin.css
+wwwroot\css\alogin.min.css
+wwwroot\css\alogin.scss
+wwwroot\css\analise.css
+wwwroot\css\analise.min.css
+wwwroot\css\analise.scss
+wwwroot\css\blanka.otf
+wwwroot\css\Chaveamento.css
+wwwroot\css\Chaveamento.min.css
+wwwroot\css\Chaveamento.scss
+wwwroot\css\estrategia.css
+wwwroot\css\estrategia.min.css
+wwwroot\css\estrategia.scss
+wwwroot\css\home.css
+wwwroot\css\home.min.css
+wwwroot\css\home.scss
+wwwroot\css\player.css
+wwwroot\css\player.min.css
+wwwroot\css\player.scss
+wwwroot\css\selecao.css
+wwwroot\css\selecao.min.css
+wwwroot\css\selecao.scss
+wwwroot\css\shared.css
+wwwroot\css\shared.min.css
+wwwroot\css\shared.scss
+wwwroot\css\treinador.css
+wwwroot\css\treinador.min.css
+wwwroot\css\treinador.scss
+wwwroot\css\treinadorIndex.css
+wwwroot\css\treinadorIndex.min.css
+wwwroot\css\treinadorIndex.scss
+wwwroot\css\treino.css
+wwwroot\css\treino.min.css
+wwwroot\css\treino.scss
+wwwroot\favicon.ico
+wwwroot\favicon_darkmode.ico
+wwwroot\img\elos\Ascendant 1.png
+wwwroot\img\elos\Ascendant 2.png
+wwwroot\img\elos\Ascendant 3.png
+wwwroot\img\elos\Bronze 1.png
+wwwroot\img\elos\Bronze 2.png
+wwwroot\img\elos\Bronze 3.png
+wwwroot\img\elos\Diamond 1.png
+wwwroot\img\elos\Diamond 2.png
+wwwroot\img\elos\Diamond 3.png
+wwwroot\img\elos\Gold 1.png
+wwwroot\img\elos\Gold 2.png
+wwwroot\img\elos\Gold 3.png
+wwwroot\img\elos\Immortal 1.png
+wwwroot\img\elos\Immortal 2.png
+wwwroot\img\elos\Immortal 3.png
+wwwroot\img\elos\Iron 1.png
+wwwroot\img\elos\Iron 2.png
+wwwroot\img\elos\Iron 3.png
+wwwroot\img\elos\Platinum 1.png
+wwwroot\img\elos\Platinum 2.png
+wwwroot\img\elos\Platinum 3.png
+wwwroot\img\elos\Radiant.png
+wwwroot\img\elos\Silver 1.png
+wwwroot\img\elos\Silver 2.png
+wwwroot\img\elos\Silver 3.png
+wwwroot\img\elos\Unrated.png
+wwwroot\img\icon_perfil.png
+wwwroot\img\icones\estrategia.png
+wwwroot\img\lapis.png
+wwwroot\img\lixo.png
+wwwroot\img\loading.gif
+wwwroot\img\LogoAFEE.png
+wwwroot\img\LogoAFEE_darkmode.png
+wwwroot\img\lupa.png
+wwwroot\img\olho.png
+wwwroot\js\agenda.js
+wwwroot\js\site.js
+wwwroot\lib\bootstrap\dist\css\bootstrap.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+wwwroot\lib\bootstrap\LICENSE
+wwwroot\lib\jquery\dist\jquery.js
+wwwroot\lib\jquery\dist\jquery.min.js
+wwwroot\lib\jquery\dist\jquery.min.map
+wwwroot\lib\jquery\LICENSE.txt
+wwwroot\lib\jquery-validation\dist\additional-methods.js
+wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+wwwroot\lib\jquery-validation\dist\jquery.validate.js
+wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+wwwroot\lib\jquery-validation\LICENSE.md
+wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js
+wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js
+wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt

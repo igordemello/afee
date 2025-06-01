@@ -1,0 +1,35 @@
+﻿@model IEnumerable<tcc_in305b.Models.Treinador>
+
+<h1>Gerenciar Treinadores:</h1>
+<a href="@Url.Action("CreateTreinador", "Treinador")" class="btn btn-primary">
+    <i class="fas fa-edit"></i> Criar
+</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var treinador in Model)
+
+
+
+        {
+            <tr>
+                <td>@treinador.Nome</td>
+                <td>@treinador.User.Email</td>  
+                <td>
+                    <a href="@Url.Action("EditTreinador", "Treinador", new { id = treinador.Id })" class="btn btn-success">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a href="@Url.Action("DeleteTreinador", "Treinador", new { id = treinador.Id })" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Deletar
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

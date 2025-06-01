@@ -1,0 +1,669 @@
+﻿@model Selecao
+
+<head>
+    <link rel="stylesheet" href="~/css/selecao.css">
+    @{
+        ViewData["Title"] = "Detalhes da Seleção";
+    }
+</head>
+
+<body>
+
+   
+
+    <h1>Detalhes da Seleção</h1>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <div class="container">
+        <div class="conteudo-esquerdo">
+            <div>
+                <h3>@Model.Nome</h3>
+                <p><strong>Treinador:</strong> @Model.Treinador?.Nome</p>
+                <p><strong>Data de Início:</strong> @Model.DataInicio.ToShortDateString()</p>
+                <p><strong>Data de Fim:</strong> @(Model.DataFim?.ToShortDateString() ?? "Em andamento")</p>
+                <p><strong>Convidados:</strong> @(Model.Convidado ?? "Sem convidados")</p>
+                @if (Model.DataFim == null && User.IsInRole("Treinador"))
+                {
+                    
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#finalizarSelecaoModal">
+                        Finalizar Seleção
+                    </button>
+                }
+            </div>
+            <br />
+            <h4>Rounds</h4>
+
+            @if (Model.DataFim == null && User.IsInRole("Treinador"))
+            {
+                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addRoundModal">
+                    Adicionar Round
+                </button>
+                <br />
+                <br />
+            }
+            @if (Model.Rounds.Any())
+            {
+                <small><i>Arraste as equipes para alterar o confronto.</i></small>
+                <ul>
+                    @foreach (var (round, index) in Model.Rounds.OrderBy(r => r.Data).Select((round, index) => (round, index)))
+                    {
+
+                        <li>
+                            <div class="round-conteudo">
+                                <strong>Round @(@index + 1):</strong> <span class=data>@round.Data.ToShortDateString()</span>
+                                <div class="round-icones">
+                                        <button class="btn btn-link btn-sm" data-bs-toggle="collapse" data-bs-target="#round-@round.Id">
+                                            <i class="bi bi-chevron-down"></i>
+                                        </button>
+
+                                    @if (Model.DataFim == null && User.IsInRole("Treinador"))
+                                    {
+                                        <form asp-action="DeleteRound" method="post" class="d-inline">
+                                            <input type="hidden" name="roundId" value="@round.Id" />
+                                            <input type="hidden" name="selecaoId" value="@Model.Id" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm ms-3 lixeira-round" onclick="return confirm('Tem certeza que deseja excluir este round?')">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </form>
+
+                                    }
+                                </div>
+                            </div>
+
+                            <div id="round-@round.Id" class="collapse mt-2">
+                                @foreach (var (partida, partidaIndex) in round.Partidas.Select((partida, partidaIndex) => (partida, partidaIndex)))
+                                {
+                                    <div class="mb-2">
+                                        <strong>Partida @(@partidaIndex + 1):</strong>
+                                        <div class="equipes-container" data-partida-id="@partida.Id">
+                                            @foreach (var equipePartida in partida.EquipePartidas)
+                                            {
+                                                @if (Model.DataFim == null && equipePartida.Pontuacao == null && User.IsInRole("Treinador"))
+                                                {
+                                                    <span class="equipe-item"
+                                                          draggable="true"
+                                                          data-equipe-id="@equipePartida.Equipe.Id"
+                                                          data-partida-id="@partida.Id"
+                                                          ondragstart="drag(event)"
+                                                          ondragover="allowDrop(event)"
+                                                          ondrop="drop(event)">
+                                                        @equipePartida.Equipe.Nome
+                                                        @if (equipePartida.Pontuacao != null)
+                                                        {
+                                                            <span>: @(equipePartida.Pontuacao?.ToString() ?? null)</span>
+                                                        }
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="equipe-item-sm">
+                                                        @equipePartida.Equipe.Nome
+                                                        @if (equipePartida.Pontuacao != null)
+                                                        {
+                                                            <span>: @(equipePartida.Pontuacao?.ToString() ?? null)</span>
+                                                        }
+                                                    </span>
+                                                }
+
+                                                @if (equipePartida != partida.EquipePartidas.Last())
+                                                {
+                                                    <span> x </span>
+                                                }
+                                            }
+                                            @if (!partida.EquipePartidas.All(ep => ep.Pontuacao.HasValue) && Model.DataFim == null && User.IsInRole("Treinador"))
+                                            {
+                                                <a href="#" class="btn btn-primary inserir-pontuacao" data-bs-toggle="modal" data-bs-target="#pontuacaoModal"
+                                                   data-partida-id="@partida.Id"
+                                                   data-equipes='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(partida.EquipePartidas.Select(ep => new { ep.Equipe.Nome, ep.EquipeId })))'>
+                                                    Pontuação
+                                                </a>
+                                            }
+                                        </div>
+                                    </div>
+                                    
+                                }
+
+                                
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Sem rounds cadastrados nesta seleção.</p>
+            }
+
+            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+        </div>
+
+        <div class="conteudo-direito">
+            <h4>Equipes</h4>
+
+            @if (Model.DataFim == null && User.IsInRole("Treinador"))
+            {
+                <button type="button" class="btn btn-outline-primary btn-sm direita" data-bs-toggle="modal" data-bs-target="#addEquipeModal">
+                    Criar Equipe
+                </button>
+            }
+                <button class="btn btn-link btn-sm" data-bs-toggle="collapse" data-bs-target="#equipesCollapse">
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <br />
+                <br />
+            @if (ViewBag.Equipes != null && ViewBag.Equipes.Count > 0)
+            {
+                <div id="equipesCollapse" class="collapse mt-2">
+                    @if (Model.DataFim == null && User.IsInRole("Treinador"))
+                    {
+                    <a asp-action="AdicionarJogadorLivre" asp-route-selecaoId="@Model.Id" class="btn btn-secondary">Alocar Jogador Livre</a>
+                    <a asp-action="TrocarJogadores" asp-route-selecaoId="@Model.Id" class="btn btn-secondary">Trocar Jogadores</a>
+                    <a asp-action="AlterarJogador" asp-route-selecaoId="@Model.Id" class="btn btn-secondary">Alterar Jogador</a>
+                    <a asp-action="RemoverJogador" class="btn btn-secondary">Remover Jogador</a>
+                    }
+                    <table class="table titulo-equipe direita">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Status</th>
+                                <th>Data de Criação</th>
+                                @if (Model.DataFim != null)
+                                {
+                                    <th>Ações</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var equipe in ViewBag.Equipes)
+                            {
+                                <tr>
+                                <td>@equipe.Nome</td>
+                                <td>@equipe.Status</td>
+                                <td>@equipe.DtCriacao.ToShortDateString()</td>
+                                   
+                                <td>
+                                        <button class="btn btn-link btn-sm" data-bs-toggle="collapse" data-bs-target="#equipe-@equipe.Id">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+                                        @if (Model.DataFim == null && User.IsInRole("Treinador"))
+                                        {
+                                            <a asp-action="DetailsEquipe" asp-route-id="@equipe.Id" class="btn btn-outline-info" ><i class="bi bi-info"></i></a>
+                                            <a asp-action="Edit" asp-route-id="@equipe.Id" class="btn btn-outline-warning" ><i class="bi bi-pencil"></i></a>
+                                            <a asp-action="Delete" asp-route-id="@equipe.Id" class="btn btn-outline-danger"><i class="bi bi-trash3"></i></a>
+                                        }
+                                    </td>   
+                                </tr>
+                                <tr id="equipe-@equipe.Id" class="collapse mt-2">
+                                    <td colspan="4" style="border-top: 1px solid #ddd; padding-top: 10px;">
+                                        <strong>Jogadores:</strong>
+                                        @if (ViewBag.PlayersEquipe != null)
+                                        {
+                                            var jogadoresDaEquipe = ((IEnumerable<Player>)ViewBag.PlayersEquipe).Where(p => p.EquipeId == equipe.Id);
+                                            if (jogadoresDaEquipe.Any())
+                                            {
+                                                foreach (var jogador in jogadoresDaEquipe)
+                                                    {
+                                                        <div>@jogador.Nome</div>
+                                                    }
+                                            }
+                                            else
+                                            {
+                                                <div>Sem jogadores</div>
+                                            }
+                                        }
+                                        
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                
+                </div>
+            }
+            else
+            {
+                <p>Nenhuma equipe encontrada para esta seleção.</p>
+            }
+        </div>
+
+        <div class="conteudo-players">
+            <h4>Players</h4>
+
+            @if (Model.DataFim == null && User.IsInRole("Treinador"))
+            {
+                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addPlayersModal">
+                    Adicionar Players
+                </button>
+            }
+                <button class="btn btn-link btn-sm" data-bs-toggle="collapse" data-bs-target="#playersCollapse">
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                <br />
+                <br />
+            @if (ViewBag.Players != null && ViewBag.Players.Count > 0)
+            {
+                <div id="playersCollapse" class="collapse mt-2">
+                    <div id="remover-players-container">
+                        @if (Model.DataFim == null && User.IsInRole("Treinador"))
+                        {
+                            <button id="toggle-remover-players" class="btn btn-danger">Remover Players</button>
+                        }
+                        <form id="remover-players-form" asp-action="RemovePlayersFromSelecao" method="post">
+                            <input type="hidden" name="selecaoId" value="@Model.Id" />
+                            
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Nickname</th>
+                                        <th id="checkbox-header" style="display: none;">Selecione</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var player in ViewBag.Players)
+                                    {
+                                        <tr>
+                                            <td>@player.Nome</td>
+                                            <td>@player.Nickname#@player.Tag</td>
+                                            <td class="checkbox-cell" style="display: none;">
+                                                <input type="checkbox" name="selectedPlayers" value="@player.Id" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <button type="submit" id="confirm-button" class="btn btn-primary" style="display: none;">Confirmar</button>
+                        </form> 
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p>Nenhum player encontrado para esta seleção.</p>
+            }
+        </div>
+
+
+    </div>
+
+
+
+    <!-- Modal para Adicionar Novo Round -->
+    <div class="modal fade" id="addRoundModal" tabindex="-1" aria-labelledby="addRoundModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="AddRound" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addRoundModalLabel">Adicionar Novo Round</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="SelecaoId" value="@Model.Id" />
+                        <div class="mb-3">
+                            <label for="RoundDate" class="form-label">Data do Round</label>
+                            <input type="date" class="form-control" id="RoundDate" name="Data" required min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Equipes Participantes</label>
+                            <div class="form-check">
+                                @foreach (var equipe in ViewBag.Equipes)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input equipe-checkbox" type="checkbox" name="EquipesSelecionadas" value="@equipe.Id" id="equipe-@equipe.Id" />
+                                        <label class="form-check-label" for="equipe-@equipe.Id">
+                                            @equipe.Nome
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                            <small class="text-muted">Selecione as equipes participantes (número tem que ser par). Deixe vazio para incluir todas.</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="saveRoundButton" disabled>Salvar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addEquipeModal" tabindex="-1" aria-labelledby="addEquipeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="CreateEquipe" asp-controller="Selecao" method="post">
+                    <input type="hidden" name="selecaoId" value="@Model.Id" />
+                    <div class="modal-header">
+                        <h5 class="modal-title">Criar Nova Equipe</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="NomeEquipe" class="form-label">Nome da Equipe</label>
+                            <input type="text" class="form-control" id="NomeEquipe" name="Nome" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="finalizarSelecaoModal" tabindex="-1" aria-labelledby="finalizarSelecaoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="FinalizarSelecao" method="post">
+                    <input type="hidden" name="selecaoId" value="@Model.Id" />
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="finalizarSelecaoModalLabel">Finalizar Seleção</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Selecione os jogadores que deseja efetivar (opcional):</p>
+                        @foreach (var player in ViewBag.Players)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="selectedPlayers" value="@player.Id" id="player-@player.Id" />
+                                <label class="form-check-label" for="player-@player.Id">
+                                    @player.Nome (@player.Nickname)
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addPlayersModal" tabindex="-1" aria-labelledby="addPlayersModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="AddPlayersToSelecao" method="post">
+                    <input type="hidden" name="selecaoId" value="@Model.Id" />
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addPlayersModalLabel">Adicionar Jogadores</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Selecione os jogadores que deseja adicionar à seleção:</p>
+                        @foreach (var player in ViewBag.PlayersCan)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="selectedPlayers" value="@player.Id" id="player-@player.Id" />
+                                <label class="form-check-label" for="player-@player.Id">
+                                    @player.Nome (@player.Nickname)
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="pontuacaoModal" tabindex="-1" aria-labelledby="pontuacaoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pontuacaoModalLabel">Inserir Pontuação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="pontuacaoForm">
+                        <input type="hidden" id="partidaId" name="partidaId" />
+                        <div id="equipesContainer">
+                            <!-- Formulário das equipes será renderizado aqui -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="salvarPontuacao">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('.equipe-checkbox');
+            const saveButton = document.getElementById('saveRoundButton');
+
+            function updateButtonState() {
+                const selectedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+
+                if (selectedCount >= 2 && selectedCount % 2 === 0 || selectedCount === 0) {
+                    saveButton.disabled = false;
+                    saveButton.classList.remove('btn-secondary');
+                    saveButton.classList.add('btn-primary');
+                } else {
+                    saveButton.disabled = true;
+                    saveButton.classList.remove('btn-primary');
+                    saveButton.classList.add('btn-secondary');
+                }
+            }
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateButtonState);
+            });
+
+            updateButtonState();
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('input[name="selectedPlayers"]');
+            const saveButton = document.querySelector('#finalizarSelecaoModal .btn-primary');
+
+            function updateButtonState() {
+                saveButton.disabled = false;
+            }
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateButtonState);
+            });
+
+            updateButtonState();
+        });
+        document.getElementById("toggle-remover-players").addEventListener("click", function () {
+            const checkboxes = document.querySelectorAll(".checkbox-cell");
+            const header = document.getElementById("checkbox-header");
+            const confirmButton = document.getElementById("confirm-button");
+
+            const isHidden = checkboxes[0].style.display === "none";
+            checkboxes.forEach(cell => cell.style.display = isHidden ? "table-cell" : "none");
+            header.style.display = isHidden ? "table-cell" : "none";
+            confirmButton.style.display = isHidden ? "block" : "none";
+
+            this.textContent = isHidden ? "Cancelar" : "Remover Players";
+            this.classList.toggle("btn-danger", !isHidden);
+            this.classList.toggle("btn-secondary", isHidden);
+        });
+        function drag(event) {
+            // Armazena os IDs da equipe e da partida no evento de arrastar
+            event.dataTransfer.setData(
+                "text",
+                event.target.dataset.equipeId + "|" + event.target.dataset.partidaId
+            );
+        }
+
+        function allowDrop(event) {
+            // Permite o evento de drop
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+
+            // Obtém os dados do elemento arrastado
+            const data = event.dataTransfer.getData("text");
+            const [draggedEquipeId, draggedPartidaId] = data.split("|");
+            const targetEquipeId = event.target.dataset.equipeId;
+            const targetPartidaId = event.target.dataset.partidaId;
+
+            // Prevenir drop no mesmo elemento
+            if (
+                draggedEquipeId === targetEquipeId ||
+                draggedPartidaId === targetPartidaId
+            ) {
+                console.warn("Não é possível trocar equipes na mesma partida.");
+                return;
+            }
+
+            // Atualiza a interface visualmente
+            const draggedElement = document.querySelector(
+                `[data-equipe-id='${draggedEquipeId}'][data-partida-id='${draggedPartidaId}']`
+            );
+            const targetElement = document.querySelector(
+                `[data-equipe-id='${targetEquipeId}'][data-partida-id='${targetPartidaId}']`
+            );
+
+            if (draggedElement && targetElement) {
+                const draggedParent = draggedElement.parentElement;
+                const targetParent = targetElement.parentElement;
+
+                // Troca os elementos visualmente
+                draggedParent.replaceChild(targetElement, draggedElement);
+                targetParent.appendChild(draggedElement);
+
+                // Envia os dados para o backend
+                updateEquipePartida(
+                    draggedEquipeId,
+                    targetEquipeId,
+                    draggedPartidaId,
+                    targetPartidaId
+                );
+            } else {
+                console.warn("Um dos elementos arrastados não foi encontrado.");
+            }
+        }
+
+        async function updateEquipePartida(
+            draggedEquipeId,
+            targetEquipeId,
+            draggedPartidaId,
+            targetPartidaId
+        ) {
+            try {
+                // Obter o token CSRF da página
+                const csrfToken = document.querySelector(
+                    'input[name="__RequestVerificationToken"]'
+                ).value;
+
+                // Fazer a requisição ao backend
+                const response = await fetch("/Selecao/UpdateEquipePartida", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "RequestVerificationToken": csrfToken,
+                    },
+                    body: JSON.stringify({
+                        draggedEquipeId: parseInt(draggedEquipeId),
+                        targetEquipeId: parseInt(targetEquipeId),
+                        draggedPartidaId: parseInt(draggedPartidaId),
+                        targetPartidaId: parseInt(targetPartidaId),
+                    }),
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error("Erro ao atualizar equipes:", errorText);
+                    alert("Erro ao atualizar as equipes nas partidas.");
+                    window.location.reload();
+                } else {
+                    console.log("Equipes atualizadas com sucesso!");
+                    
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error("Erro na requisição:", error);
+                alert("Erro ao atualizar as equipes nas partidas.");
+                window.location.reload();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.inserir-pontuacao').forEach(button => {
+                button.addEventListener('click', function () {
+                    const partidaId = this.getAttribute('data-partida-id');
+                    const equipes = JSON.parse(this.getAttribute('data-equipes'));
+
+                    // Atualizar o campo oculto com o ID da partida
+                    document.getElementById('partidaId').value = partidaId;
+
+                    // Renderizar o formulário para as equipes
+                    const container = document.getElementById('equipesContainer');
+                    container.innerHTML = ''; // Limpar o conteúdo anterior
+
+                    equipes.forEach(equipe => {
+                        const row = document.createElement('div');
+                        row.classList.add('mb-3');
+                        row.innerHTML = `
+                            <label class="form-label">${equipe.Nome}</label>
+                            <input type="number" class="form-control pontuacao-input" data-equipe-id="${equipe.EquipeId}" required />
+                        `;
+                        container.appendChild(row);
+                    });
+                });
+            });
+
+            // Configurar o botão "Salvar Pontuação"
+            document.getElementById('salvarPontuacao').addEventListener('click', function () {
+                const partidaId = document.getElementById('partidaId').value;
+                const pontuacoes = Array.from(document.querySelectorAll('.pontuacao-input')).map(input => ({
+                    equipeId: input.dataset.equipeId,
+                    pontuacao: parseInt(input.value, 10)
+                }));
+
+                if (pontuacoes.some(p => isNaN(p.pontuacao))) {
+                    alert('Por favor, preencha todas as pontuações.');
+                    return;
+                }
+
+                if (pontuacoes[0].pontuacao === pontuacoes[1].pontuacao) {
+                    alert('As pontuações das duas equipes não podem ser iguais.');
+                    return;
+                }
+
+                // Enviar os dados para o backend
+                fetch(`/Selecao/InserirPontuacao`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ partidaId, pontuacoes }),
+                })
+                    .then(async response => {
+                        if (!response.ok) {
+                            const errorMessage = await response.text();
+                            alert(`Erro: ${errorMessage}`);
+                        } else {
+                            alert('Pontuação salva com sucesso!');
+                            location.reload(); // Atualiza a página para refletir as mudanças
+                        }
+                    })
+                    .catch(error => {
+                        alert(`Erro ao conectar ao servidor: ${error.message}`);
+                    });
+            });
+        });
+    </script>
+
+</body>

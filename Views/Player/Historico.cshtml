@@ -1,0 +1,23 @@
+﻿<h1>Histórico do @ViewBag.Player.Nome</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>Data</td>
+            <td>Tipo de Evento</td>
+            <td>Descrição</td>
+            <td>Dados alterados</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var historico in ViewBag.Historico)
+        {
+            <tr>
+                <td>@historico.DataEvento.ToString("dd/MM/yyyy")</td>
+                <td>@historico.TipoEvento</td>
+                <td>@historico.Descricao</td>
+                <td>@historico.DadosAlterados</td>
+            </tr>
+        }
+    </tbody>
+</table>

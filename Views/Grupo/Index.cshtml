@@ -1,0 +1,48 @@
+﻿@model IEnumerable<tcc_in305b.Models.Grupo>
+
+<h2>Grupos</h2>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Criar Novo Grupo</a>
+    <a asp-action="AdicionarJogadorLivre" class="btn btn-secondary">Alocar Jogador Livre</a>
+    <a asp-action="TrocarJogadores" class="btn btn-secondary">Trocar Jogadores</a>
+    <a asp-action="AlterarJogador" class="btn btn-secondary">Alterar Jogador</a>
+    <a asp-action="RemoverJogador" class="btn btn-secondary">Remover Jogador</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Treinador</th>
+            <th>Status</th>
+            <th>Data de Criação</th>
+            <th>Tipo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nome</td>
+                <td>
+                    @if (string.IsNullOrEmpty(item.Treinador?.Nome))
+                    {
+                        <span>Sem Treinador</span>
+                    }
+                    else
+                    {
+                        <span>@item.Treinador.Nome</span>
+                    }
+                </td>
+                <td>@item.Status</td>
+                <td>@item.DtCriacao.ToShortDateString()</td>
+                <td>@item.Tipo</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" style=" color: white;">Detalhes</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" style=" color: white;">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

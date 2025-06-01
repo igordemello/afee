@@ -1,0 +1,16 @@
+﻿@model tcc_in305b.ViewModels.RemoverJogadorViewModel
+
+<h2>Remover jogador de uma equipe</h2>
+<form asp-action="RemoverJogador" method="post">
+    <div class="form-group">
+        <label>Nome do Jogador a remover</label>
+        <select name="playerToRemoveNome" class="form-control" required>
+            <option value="">Selecione um jogador</option>
+            @foreach (var jogador in ViewBag.Jogadores)
+            {
+                <option value="@jogador.Text">@jogador.Text</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Remover Jogador da equipe</button>
+</form>

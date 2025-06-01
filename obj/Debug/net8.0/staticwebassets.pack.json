@@ -1,0 +1,545 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\blanka.otf",
+      "PackagePath": "staticwebassets\\blanka.otf"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\Chaveamento.css",
+      "PackagePath": "staticwebassets\\css\\Chaveamento.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\Chaveamento.min.css",
+      "PackagePath": "staticwebassets\\css\\Chaveamento.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\Chaveamento.scss",
+      "PackagePath": "staticwebassets\\css\\Chaveamento.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\alogin.css",
+      "PackagePath": "staticwebassets\\css\\alogin.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\alogin.min.css",
+      "PackagePath": "staticwebassets\\css\\alogin.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\alogin.scss",
+      "PackagePath": "staticwebassets\\css\\alogin.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\analise.css",
+      "PackagePath": "staticwebassets\\css\\analise.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\analise.min.css",
+      "PackagePath": "staticwebassets\\css\\analise.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\analise.scss",
+      "PackagePath": "staticwebassets\\css\\analise.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\blanka.otf",
+      "PackagePath": "staticwebassets\\css\\blanka.otf"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\estrategia.css",
+      "PackagePath": "staticwebassets\\css\\estrategia.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\estrategia.min.css",
+      "PackagePath": "staticwebassets\\css\\estrategia.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\estrategia.scss",
+      "PackagePath": "staticwebassets\\css\\estrategia.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\home.css",
+      "PackagePath": "staticwebassets\\css\\home.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\home.min.css",
+      "PackagePath": "staticwebassets\\css\\home.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\home.scss",
+      "PackagePath": "staticwebassets\\css\\home.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\player.css",
+      "PackagePath": "staticwebassets\\css\\player.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\player.min.css",
+      "PackagePath": "staticwebassets\\css\\player.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\player.scss",
+      "PackagePath": "staticwebassets\\css\\player.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\selecao.css",
+      "PackagePath": "staticwebassets\\css\\selecao.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\selecao.min.css",
+      "PackagePath": "staticwebassets\\css\\selecao.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\selecao.scss",
+      "PackagePath": "staticwebassets\\css\\selecao.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\shared.css",
+      "PackagePath": "staticwebassets\\css\\shared.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\shared.min.css",
+      "PackagePath": "staticwebassets\\css\\shared.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\shared.scss",
+      "PackagePath": "staticwebassets\\css\\shared.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\treinador.css",
+      "PackagePath": "staticwebassets\\css\\treinador.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\treinador.min.css",
+      "PackagePath": "staticwebassets\\css\\treinador.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\treinador.scss",
+      "PackagePath": "staticwebassets\\css\\treinador.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\treinadorIndex.css",
+      "PackagePath": "staticwebassets\\css\\treinadorIndex.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\treinadorIndex.min.css",
+      "PackagePath": "staticwebassets\\css\\treinadorIndex.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\treinadorIndex.scss",
+      "PackagePath": "staticwebassets\\css\\treinadorIndex.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\treino.css",
+      "PackagePath": "staticwebassets\\css\\treino.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\treino.min.css",
+      "PackagePath": "staticwebassets\\css\\treino.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\css\\treino.scss",
+      "PackagePath": "staticwebassets\\css\\treino.scss"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\favicon_darkmode.ico",
+      "PackagePath": "staticwebassets\\favicon_darkmode.ico"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\LogoAFEE.png",
+      "PackagePath": "staticwebassets\\img\\LogoAFEE.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\LogoAFEE_darkmode.png",
+      "PackagePath": "staticwebassets\\img\\LogoAFEE_darkmode.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Ascendant 1.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Ascendant 1.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Ascendant 2.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Ascendant 2.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Ascendant 3.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Ascendant 3.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Bronze 1.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Bronze 1.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Bronze 2.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Bronze 2.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Bronze 3.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Bronze 3.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Diamond 1.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Diamond 1.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Diamond 2.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Diamond 2.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Diamond 3.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Diamond 3.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Gold 1.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Gold 1.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Gold 2.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Gold 2.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Gold 3.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Gold 3.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Immortal 1.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Immortal 1.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Immortal 2.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Immortal 2.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Immortal 3.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Immortal 3.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Iron 1.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Iron 1.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Iron 2.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Iron 2.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Iron 3.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Iron 3.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Platinum 1.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Platinum 1.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Platinum 2.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Platinum 2.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Platinum 3.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Platinum 3.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Radiant.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Radiant.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Silver 1.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Silver 1.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Silver 2.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Silver 2.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Silver 3.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Silver 3.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\elos\\Unrated.png",
+      "PackagePath": "staticwebassets\\img\\elos\\Unrated.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\icon_perfil.png",
+      "PackagePath": "staticwebassets\\img\\icon_perfil.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\icones\\estrategia.png",
+      "PackagePath": "staticwebassets\\img\\icones\\estrategia.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\lapis.png",
+      "PackagePath": "staticwebassets\\img\\lapis.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\lixo.png",
+      "PackagePath": "staticwebassets\\img\\lixo.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\loading.gif",
+      "PackagePath": "staticwebassets\\img\\loading.gif"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\lupa.png",
+      "PackagePath": "staticwebassets\\img\\lupa.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\img\\olho.png",
+      "PackagePath": "staticwebassets\\img\\olho.png"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\js\\agenda.js",
+      "PackagePath": "staticwebassets\\js\\agenda.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Users\\Igor\\Desktop\\tcc_in305b\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.tcc_in305b.props",
+      "PackagePath": "build\\tcc_in305b.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.tcc_in305b.props",
+      "PackagePath": "buildMultiTargeting\\tcc_in305b.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.tcc_in305b.props",
+      "PackagePath": "buildTransitive\\tcc_in305b.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.tcc_in305b.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

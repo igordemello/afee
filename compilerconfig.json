@@ -1,0 +1,50 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/shared.css",
+    "inputFile": "wwwroot/css/shared.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/player.css",
+    "inputFile": "wwwroot/css/player.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/estrategia.css",
+    "inputFile": "wwwroot/css/estrategia.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/treino.css",
+    "inputFile": "wwwroot/css/treino.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/treinador.css",
+    "inputFile": "wwwroot/css/treinador.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/alogin.css",
+    "inputFile": "wwwroot/css/alogin.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/treinadorIndex.css",
+    "inputFile": "wwwroot/css/treinadorIndex.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/home.css",
+    "inputFile": "wwwroot/css/home.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/seleção.css",
+    "inputFile": "wwwroot/css/seleção.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/selecao.css",
+    "inputFile": "wwwroot/css/selecao.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/analise.css",
+    "inputFile": "wwwroot/css/analise.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/Chaveamento.css",
+    "inputFile": "wwwroot/css/Chaveamento.scss"
+  }
+]

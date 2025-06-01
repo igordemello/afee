@@ -1,0 +1,50 @@
+﻿@model tcc_in305b.ViewModels.FaseDetalhesViewModel
+
+<style>
+    .listplayers{
+        margin-bottom:20px;
+        margin-right: 10px;
+    }
+</style>
+
+<h2>Detalhes da Fase</h2>
+
+<div>
+    <h3>@Model.Nome</h3>
+    <p><strong>Status:</strong> @Model.Status</p>
+</div>
+
+<div>
+    <h4>Treinadores</h4>
+    <ul>
+        @foreach (var treinador in Model.Treinadores)
+        {
+            <li>@treinador</li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h4 class="listplayers">Players</h4>
+    <a asp-action="AdicionarPlayer" asp-route-faseId="@Model.Id" class="btn btn-outline-primary listplayers"><i class="bi bi-plus"></i>Adicionar</a>
+    @if (Model.Players == null || Model.Players.Count == 0)
+    {
+        <p><em>Sem players na fase</em></p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var player in Model.Players)
+            {
+                <li class="listplayers">
+                    @player.Nome
+                    <form method="post" asp-action="RemoverPlayer" style="display:inline;">
+                        <input type="hidden" name="faseId" value="@Model.Id" />
+                        <input type="hidden" name="playerId" value="@player.Id" />
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Tem certeza que deseja remover este jogador da fase?')">-</button>
+                    </form>
+                </li>
+            }
+        </ul>
+    }
+</div>

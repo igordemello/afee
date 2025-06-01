@@ -1,0 +1,219 @@
+﻿@model tcc_in305b.ViewModels.CriarAnaliseViewModel
+@using Newtonsoft.Json
+
+<head>
+    <link rel="stylesheet" href="~/css/analise.min.css" />
+</head>
+
+<body>
+    <h1>Criar Análise</h1>
+
+    <form asp-action="Criar" method="post">
+        <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" name="Descricao" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="tipo">Tipo</label>
+            <select id="tipo" name="Tipo" class="form-control">
+                <option value="">Selecione</option>
+                <option value="Player">Player</option>
+                <option value="Grupo">Grupo</option>
+                <option value="PlayerEmGrupo">Player em Grupo</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="alvo">Alvo</label>
+            <select id="alvo" name="AlvoId" class="form-control">
+                <!-- Será preenchido via JavaScript -->
+            </select>
+        </div>
+
+        <div class="form-group" id="grupo-container" style="display: none;">
+            <!-- Este campo será usado apenas para referência -->
+            <label for="grupo">Grupo</label>
+            <select id="grupo" name="GrupoId" class="form-control">
+                @foreach (var grupo in ViewBag.Grupos)
+                {
+                    <option value="@grupo.Id">@grupo.Nome</option>
+                }
+            </select>
+        </div>
+        <br />
+
+        <h3>Notas</h3>
+        <h5>Selecione as notas que deseja atribuir</h5>
+
+        <!-- Multi-select para as notas -->
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="notasDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Selecione as Notas
+            </button>
+            <div class="dropdown-menu p-3" aria-labelledby="notasDropdown" style="width: 300px; max-height: 300px; overflow-y: auto;">
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="pesquisarNotas" placeholder="Pesquisar notas..." />
+                </div>
+
+                <div id="notas-checkboxes">
+                    @foreach (var nota in ViewBag.Notas)
+                    {
+                        <div class="form-check selectable" data-checkbox-id="nota-@nota.Id">
+                            <input type="checkbox" class="form-check-input nota-checkbox" id="nota-@nota.Id" value="@nota.Id">
+                            <label class="form-check-label" for="nota-@nota.Id">@nota.Nome</label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+
+        <br />
+
+
+
+        <!-- Área para os campos das notas selecionadas -->
+        <div id="notas-fields-container">
+            <!-- Campos das notas serão inseridos aqui via JavaScript -->
+        </div>
+
+
+
+        <br />
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+
+    <script>
+
+        const players = @Html.Raw(JsonConvert.SerializeObject(
+            ViewBag.Players,
+            new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }
+            ));
+        const grupos = @Html.Raw(JsonConvert.SerializeObject(
+            ViewBag.Grupos,
+            new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }
+            ));
+
+
+        document.getElementById("tipo").addEventListener("change", function () {
+            const tipo = this.value;
+            const alvoSelect = document.getElementById("alvo");
+            const grupoContainer = document.getElementById("grupo-container");
+
+            alvoSelect.innerHTML = ""; // Limpa as opções anteriores
+
+            if (tipo === "Player") {
+                // Exibir todos os jogadores
+                players.forEach(player => {
+                    const option = document.createElement("option");
+                    option.value = player.Id;
+                    option.textContent = player.Nome;
+                    alvoSelect.appendChild(option);
+                });
+                grupoContainer.style.display = "none"; // Esconde o grupo
+            } else if (tipo === "Grupo") {
+                // Exibir todos os grupos
+                grupos.forEach(grupo => {
+                    const option = document.createElement("option");
+                    option.value = grupo.Id;
+                    option.textContent = grupo.Nome;
+                    alvoSelect.appendChild(option);
+                });
+                grupoContainer.style.display = "none"; // Esconde o grupo
+            } else if (tipo === "PlayerEmGrupo") {
+                // Filtra apenas os jogadores que pertencem a um grupo (GrupoId != null)
+                players
+                    .filter(player => player.GrupoId !== null) // Verifica se o jogador tem um grupo associado
+                    .forEach(player => {
+                        const option = document.createElement("option");
+                        option.value = player.Id;
+                        option.textContent = player.Nome;
+                        alvoSelect.appendChild(option);
+                    });
+                grupoContainer.style.display = "none"; // Esconde o grupo
+            }
+        });
+
+
+        // Função para adicionar campos para cada nota selecionada
+                document.getElementById("notas-checkboxes").addEventListener("change", function () {
+            const selectedNotas = Array.from(document.querySelectorAll(".nota-checkbox:checked")).map(cb => cb.value);
+            const container = document.getElementById("notas-fields-container");
+
+            container.innerHTML = ""; // Limpa os campos anteriores
+
+            selectedNotas.forEach((notaId, index) => {
+                // Cria os campos para as notas selecionadas
+                const div = document.createElement("div");
+                div.classList.add("form-group");
+
+                const label = document.createElement("label");
+                const checkbox = document.querySelector(`.nota-checkbox[value="${notaId}"]`);
+
+                if (checkbox) {
+                    label.textContent = `Valor para a nota ${checkbox.nextElementSibling.textContent}`;
+                }
+
+                div.appendChild(label);
+
+                const input = document.createElement("input");
+                input.type = "number";
+                input.name = `Notas[${index}].Valor`;
+                input.classList.add("form-control");
+                input.step = "0.1";
+                input.placeholder = "Digite o valor da nota";
+
+                const hiddenInput = document.createElement("input");
+                hiddenInput.type = "hidden";
+                hiddenInput.name = `Notas[${index}].NotaId`;
+                hiddenInput.value = notaId;
+
+                div.appendChild(hiddenInput);
+                div.appendChild(input);
+                container.appendChild(div);
+            });
+        });
+
+                // Previne o fechamento do dropdown ao clicar em um checkbox ou label
+        document.querySelectorAll('#notas-checkboxes .form-check').forEach(function (checkboxDiv) {
+            checkboxDiv.addEventListener('click', function (e) {
+                e.stopPropagation(); // Impede que o clique feche o dropdown
+            });
+        });
+
+        document.getElementById("pesquisarNotas").addEventListener("input", function () {
+            const filtro = this.value.toLowerCase(); // Captura o texto digitado em minúsculo
+            const checkboxes = document.querySelectorAll("#notas-checkboxes .form-check");
+
+            checkboxes.forEach(function (checkbox) {
+                const label = checkbox.querySelector("label").textContent.toLowerCase();
+                // Mostra ou oculta com base no filtro
+                checkbox.style.display = label.includes(filtro) ? "" : "none";
+            });
+
+            // Verifica se há alguma nota visível e exibe uma mensagem, se necessário
+            const visiveis = Array.from(checkboxes).some(cb => cb.style.display !== "none");
+            const noResultsMessage = document.getElementById("noResultsMessage");
+
+            if (!visiveis) {
+                if (!noResultsMessage) {
+                    // Adiciona a mensagem "Nenhuma nota encontrada" dinamicamente
+                    const message = document.createElement("div");
+                    message.id = "noResultsMessage";
+                    message.textContent = "Nenhuma nota encontrada.";
+                    message.style.color = "red";
+                    document.getElementById("notas-checkboxes").appendChild(message);
+                }
+            } else if (noResultsMessage) {
+                noResultsMessage.remove(); // Remove a mensagem se houver resultados
+            }
+        });
+
+
+
+    </script>
+</body>

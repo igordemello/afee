@@ -1,0 +1,199 @@
+﻿@model tcc_in305b.ViewModels.PlayersEquipGroupViewModel
+@{
+    string playername = ViewBag.PlayerName;
+    var primeiroGrupo = Model.PlayersInSameGroup.FirstOrDefault();
+    string grupoNome = primeiroGrupo?.Grupo != null ? primeiroGrupo.Grupo.Nome : "Sem Grupo";
+    var primeiraEquipe = Model.PlayersInSameEquip.FirstOrDefault();
+    string equipeNome = primeiraEquipe?.Equipe != null ? primeiraEquipe.Equipe.Nome : "Sem Equipe";
+    int iduser = ViewBag.PlayerIdLogado;
+}
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/player.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  <!-- Incluindo o jQuery -->
+</head>
+
+<body>
+    <div class="cabecalho">
+        <div class="perfil">
+            <img src="~/img/icon_perfil.png" class="user-icon">
+            <h2 class="player_name">@playername</h2>
+            <a href="@Url.Action("EditPlayer", "Player", new { id = iduser })"><i class="bi bi-pencil lapis"></i></a>
+        </div>
+
+        <div class="img_elo">
+            <img id="eloImg" class="elo" src="~/img/loading.gif" />
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="principal">
+        <div class="jogadores">
+            <div class="tabela">
+                <div class="btn-group btn-group-toggle" id="botoes" data-toggle="buttons">
+                    <button id="btnGrupo" class="btn btn-secondary" onclick="mostrarGrupo()">Grupo</button>
+                    <button id="btnEquipe" class="btn btn-secondary" onclick="mostrarEquipe()">Equipe</button>
+                </div>
+
+                <div id="grupoSection">
+                    <h3 class="Nplayers">@(ViewBag.GrupoNome)</h3>
+                    @if (grupoNome != "Sem Grupo")
+                    {
+                        @foreach (var player in Model.PlayersInSameGroup)
+                        {
+                            <div class="jogador">
+                                <img src="~/img/icon_perfil.png" />
+                                <h4>@player.Nickname#@player.Tag</h4>
+                            </div>
+                        }
+                    }
+                    else if (ViewBag.GrupoNome != "Sem Grupo")
+                    {
+                        <h4>Sem jogadores</h4>
+                    }
+                </div>
+
+                <div id="equipeSection" style="display: none;">
+                    <h3 class="Nplayers">@(ViewBag.EquipeNome)</h3>
+                    @if (equipeNome != "Sem Equipe")
+                    {
+                        @foreach (var player in Model.PlayersInSameEquip)
+                        {
+                            <div class="jogador">
+                                @if (player.IGL == "true")
+                                {
+                                    <i class="bi bi-bookmark-fill" id="iconb"></i>
+                                }
+                                <img src="~/img/icon_perfil.png" />
+                                <h4>@player.Nickname#@player.Tag</h4>
+                            </div>
+                        }
+                    }
+                    else if (ViewBag.EquipeNome != "Sem Equipe")
+                    {
+                        <h4>Sem jogadores</h4>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Função para carregar o Elo do jogador
+            function carregarElo() {
+                $.ajax({
+                    url: '@Url.Action("GetEloAtual", "Player")',
+                    method: 'POST',
+                    success: function (data) {
+                        if (data.success) {
+                            $("#eloImg").attr("src", `../img/elos/${data.elo}.png`);
+                        } else {
+                            alert(data.message); // Exibe uma mensagem caso haja erro
+                        }
+                    },
+                    error: function () {
+                        alert("Erro ao carregar o Elo.");
+                    }
+                });
+            }
+
+            // Função para carregar as estatísticas do jogador
+            function carregarEstatisticas() {
+                $.ajax({
+                    url: '@Url.Action("GetPlayerStats", "Player")',
+                    method: 'POST',
+                    success: function (data) {
+                        if (data.success) {
+                            $("#kills").text(data.kills);
+                            $("#deaths").text(data.deaths);
+                            $("#assists").text(data.assists);
+                            $("#hsPercentage").text(data.hsPercentage + "%");
+                            $("#KDA").text(((data.kills + data.assists) / data.deaths).toFixed(2));
+                            $("#winRate").text(data.winRate + "%");
+                            $("#damage").text(data.damage);
+                            $("#firstBloods").text(data.firstBloods);
+                        } else {
+                            alert(data.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Erro ao carregar as estatísticas.");
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                carregarElo();
+                carregarEstatisticas();
+            });
+
+            function mostrarGrupo() {
+                $('#grupoSection').show();
+                $('#equipeSection').hide();
+            }
+
+            function mostrarEquipe() {
+                $('#grupoSection').hide();
+                $('#equipeSection').show();
+            }
+        </script>
+
+        <div class="estatisticas">
+            <table>
+                <tr>
+                    <td>
+                        <div class="estatistica">
+                            <h3>Kills:</h3>
+                            <h1 id="kills">...</h1>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="estatistica">
+                            <h3>Deaths:</h3>
+                            <h1 id="deaths">...</h1>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="estatistica">
+                            <h3>Assists:</h3>
+                            <h1 id="assists">...</h1>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="estatistica">
+                            <h3>KDA</h3>
+                            <h1 id="KDA">...</h1>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="estatistica">
+                            <h3>%HS:</h3>
+                            <h1 id="hsPercentage">...</h1>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="estatistica">
+                            <h3>%WIN:</h3>
+                            <h1 id="winRate">...</h1>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="estatistica">
+                            <h3>ADR</h3>
+                            <h1 id="damage">...</h1>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="estatistica">
+                            <h3>First Bloods</h3>
+                            <h1 id="firstBloods">...</h1>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
